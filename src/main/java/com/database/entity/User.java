@@ -11,23 +11,39 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+/**
+ * 用户实体
+ * 使用lombok
+ * @author RONG
+ *
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("facility")
-public class FacilityEntity implements Serializable {
-
-	/**
+@TableName("user")
+public class User implements Serializable {/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	@TableId(value = "fid", type = IdType.AUTO)
-	private Integer fid;
 	
-	@TableField("description")
-	private String description;
+	@TableId(value = "uid", type = IdType.AUTO)
+	private Integer uid;
 	
-	@TableField("hid")
-	private Integer hid;
+	@TableField("pwd")
+	private String pwd;
+	
+	@TableField("name")
+	private String name;
+	
+	@TableField("gender")
+	private Integer gender;
+	
+	@TableField("mail")
+	private String mail;
+	
+	@TableField("phone")
+	private Integer phone;
+	
+	@TableField("state")
+	private Integer state;
 }

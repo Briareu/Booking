@@ -27,7 +27,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("order")
-public class OrderEntity implements Serializable {
+public class Order implements Serializable {
 
 	/**
 	 * 
@@ -41,7 +41,7 @@ public class OrderEntity implements Serializable {
 	 * 总价，可能存在小数位——double
 	 */
 	@TableField("totalPrice")
-	private Double otalPrice;
+	private Double totalPrice;
 	
 	@TableField("uid")
 	private Integer uid;

@@ -11,31 +11,22 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-/**
- * 图片（for酒店）实体类
- * 运用lombok
- * @author RONG
- *
- */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("pic")
-public class PicEntity implements Serializable {
+@TableName("facility")
+public class Facility implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@TableId(value = "pid", type = IdType.AUTO)
-	private Integer pid;
+	@TableId(value = "fid", type = IdType.AUTO)
+	private Integer fid;
 	
-	@TableField("picUrl")
-	private String picUrl;
-	
-	@TableField("picName")
-	private String picName;
+	@TableField("description")
+	private String description;
 	
 	@TableField("hid")
 	private Integer hid;

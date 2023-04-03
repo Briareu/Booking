@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("hotel")
-public class HotelEntity implements Serializable {
+public class Hotel implements Serializable {
 
 	/**
 	 * 
@@ -36,9 +36,6 @@ public class HotelEntity implements Serializable {
 	
 	@TableField("region")
 	private String region;
-	
-	@TableField("price")
-	private String price;
 	
 	@TableField("info")
 	private String info;

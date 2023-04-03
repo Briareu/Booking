@@ -12,26 +12,30 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 收藏实体类
+ * 图片（for酒店）实体类
+ * 运用lombok
  * @author RONG
  *
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("like")
-public class LikeEntity implements Serializable {
+@TableName("pic")
+public class Pic implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@TableId(value = "lid", type = IdType.AUTO)
-	private Integer lid;
+	@TableId(value = "pid", type = IdType.AUTO)
+	private Integer pid;
 	
-	@TableField("uid")
-	private Integer uid;
+	@TableField("picUrl")
+	private String picUrl;
+	
+	@TableField("picName")
+	private String picName;
 	
 	@TableField("hid")
 	private Integer hid;

@@ -309,30 +309,54 @@
     <!-- tomcatmaven启动插件 -->
     
     <!-- lombak -->
-    <dependency>
-    	<groupId>org.projectlombok</groupId>
-    	<artifactId>lombok</artifactId>
-    	<version>1.18.20</version>
-    	<scope>provided</scope>
-    </dependency>
-        
-    <dependency>
-    	<groupId>io.springfox</groupId>
-    	<artifactId>springfox-swagger2</artifactId>
-    	<version>2.9.2</version>
-    </dependency>
+	    <dependency>
+	    	<groupId>org.projectlombok</groupId>
+	    	<artifactId>lombok</artifactId>
+	    	<version>1.18.20</version>
+	    	<scope>provided</scope>
+	    </dependency>
+	        
+	    <dependency>
+	    	<groupId>io.springfox</groupId>
+	    	<artifactId>springfox-swagger2</artifactId>
+	    	<version>2.4.0</version><!-- 2.9.2 -->
+	    </dependency>
+	    
+	    <dependency>
+	    	<groupId>io.springfox</groupId>
+	    	<artifactId>springfox-swagger-ui</artifactId>
+	    	<version>2.4.0</version>
+	    </dependency>
     
-    <dependency>
-    	<groupId>io.springfox</groupId>
-    	<artifactId>springfox-swagger-ui</artifactId>
-    	<version>2.9.2</version>
-    </dependency>
+	    <dependency>
+		   <groupId>io.swagger</groupId>
+		   <artifactId>swagger-core</artifactId>
+		   <version>1.5.8</version>
+		</dependency>
+		
+	<!-- springmvc和swagger集成 -->
+		<dependency>
+			<groupId>com.mangofactory</groupId>
+			<artifactId>swagger-springmvc</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.mangofactory</groupId>
+			<artifactId>swagger-models</artifactId>
+			<version>1.0.2</version>
+		</dependency>
     
-    <dependency>
-    	<groupId>cn.hutool</groupId>
-    	<artifactId>hutool-all</artifactId>
-    	<version>5.8.5</version>
-    </dependency>
+	    <dependency>
+	    	<groupId>cn.hutool</groupId>
+	    	<artifactId>hutool-all</artifactId>
+	    	<version>5.8.5</version>
+	    </dependency>
+	    
+	    <dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-validator</artifactId>
+		    <version>6.1.3.Final</version>
+		</dependency>
   </dependencies>
   
   <build>

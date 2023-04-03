@@ -12,31 +12,27 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 标准实体类
- * 使用lombok
+ * 收藏实体类
  * @author RONG
  *
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("standard")
-public class StandardEntity implements Serializable {
+@TableName("like")
+public class Like implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@TableId(value = "sid", type = IdType.AUTO)
-	private Integer sid;
+	@TableId(value = "lid", type = IdType.AUTO)
+	private Integer lid;
 	
-	@TableField("description")
-	private String description;
+	@TableField("uid")
+	private Integer uid;
 	
 	@TableField("hid")
 	private Integer hid;
-	
-	@TableField("totalNum")
-	private Integer totalNum;
 }
