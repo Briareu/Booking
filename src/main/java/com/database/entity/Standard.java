@@ -42,4 +42,7 @@ public class Standard implements Serializable {
 	
 	@TableField("price")
 	private String price;
+	
+	@TableField("people")
+	private Integer people;
 }

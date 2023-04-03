@@ -70,7 +70,7 @@ public class MybatisPlusUtil{
                 return super.processTypeConvert(globalConfig, fieldType);
             }
         });
-        dataSourceConfig.setUrl("jdbc:mysql://localhost:3306/tmp?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false");
+        dataSourceConfig.setUrl("jdbc:mysql://localhost:3306/Booking?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false");
         dataSourceConfig.setDriverName("com.mysql.cj.jdbc.Driver");
         dataSourceConfig.setUsername("root");
         dataSourceConfig.setPassword("123456");

@@ -4,12 +4,9 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.database.entity.TblStudent">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <result column="age" property="age" />
-        <result column="sex" property="sex" />
-        <result column="datainsuserid" property="datainsuserid" />
-        <result column="datainstime" property="datainstime" />
+        <id column="fid" property="fid" />
+        <result column="description" property="description" />
+        <result column="hid" property="hid" />
     </resultMap>
 
 </mapper>

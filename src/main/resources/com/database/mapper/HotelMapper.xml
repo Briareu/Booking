@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.database.mapper.LikeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.database.entity.Like">
+        <id column="hid" property="hid" />
+        <result column="address" property="address" />
+        <result column="province" property="province" />
+        <result column="city" property="city" />
+        <result column="region" property="region" />
+        <result column="info" property="info" />
+        <result column="star" property="star" />
+        <result column="type" property="type" />
+        <result column="comment" property="comment" />
+        <result column="hName" property="hName" />
+        <result column="score" property="score" />
+    </resultMap>
+
+</mapper>
