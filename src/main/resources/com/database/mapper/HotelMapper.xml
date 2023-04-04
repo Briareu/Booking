@@ -15,6 +15,7 @@
         <result column="comment" property="comment" />
         <result column="hName" property="hName" />
         <result column="score" property="score" />
+        <result column="facility" property="facility" />
     </resultMap>
 
 </mapper>

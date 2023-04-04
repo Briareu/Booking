@@ -54,4 +54,7 @@ public class Hotel implements Serializable {
 	
 	@TableField("score")
 	private Double score;
+	
+	@TableField("facility")
+	private String facility;
 }

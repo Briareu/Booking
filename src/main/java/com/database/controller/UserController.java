@@ -21,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/user")
 @CrossOrigin
-@Slf4j
 public class UserController {
 	
 	@Autowired
@@ -51,11 +50,91 @@ public class UserController {
 		userService.save(newuser);
 		return "注册成功!";
 	}
-	/*
+	
+	/**
+	 * 使用手机号和密码进行登陆验证
+	 * 通过验证的用户状态直接更新为1
+	 * @param loginuser
+	 * @return
+	 */
 	@PostMapping(path = "/login")
 	public Object login(@RequestBody User loginuser) {
 		System.out.println(loginuser.toString());
-		String mail = loginuser.getMail();
+		Integer phone = loginuser.getPhone();
+		String pwd = loginuser.getPwd();
+		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("phone", phone);
+		if(userService.getOne(queryWrapper) == null) {
+			return "nouser";
+		}
+		User user = userService.getOne(queryWrapper);
+		if(user.getPwd().equals(pwd)) {
+			user.setState(1);
+			return user;
+		}
+		return "wrong";
+	}
+	
+	/**
+	 * 根据uid更新密码
+	 * @param user
+	 * @return
+	 */
+	@PostMapping(path = "/changePwd")
+	public String changePwd(@RequestBody User user) {
+		Integer uid = user.getUid();
+		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("uid", uid);
+		if(userService.getOne(queryWrapper) == null) {
+			return "nouser";
+		}
 		
-	}*/
+		User theuser = userService.getOne(queryWrapper);
+		theuser.setPwd(user.getPwd());
+		userService.updateById(theuser);
+		return "success";
+	}
+	
+	/**
+	 * 根据id更新性别、邮箱、用户名称
+	 * @param user
+	 * @return
+	 */
+	@PostMapping(path = "/changeProfile")
+	public String changeProfile(@RequestBody User user) {
+		Integer uid = user.getUid();
+		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("uid", uid);
+		if(userService.getOne(queryWrapper) == null) {
+			return "nouser";
+		}
+		
+		User theuser = userService.getOne(queryWrapper);
+		
+		theuser.setGender(user.getGender());
+		theuser.setMail(user.getMail());
+		theuser.setName(user.getName());
+		userService.updateById(theuser);
+		return "success";
+	}
+	
+	/**
+	 * 更新用户状态（根据传入的user进行更新）
+	 * @param user
+	 * @return
+	 */
+	@PostMapping(path = "changeState")
+	public String changeState(@RequestBody User user) {
+		Integer uid = user.getUid();
+		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("uid", uid);
+		if(userService.getOne(queryWrapper) == null) {
+			return "nouser";
+		}
+		
+		User theuser = userService.getOne(queryWrapper);
+		theuser.setState(user.getState());
+		userService.updateById(theuser);
+		return "success";
+	}
 }
