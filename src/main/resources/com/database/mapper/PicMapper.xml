@@ -6,7 +6,6 @@
     <resultMap id="BaseResultMap" type="com.database.entity.Pic">
         <id column="pid" property="pid" />
         <result column="picUrl" property="picUrl" />
-        <result column="picName" property="picName" />
         <result column="hid" property="hid" />
     </resultMap>
 

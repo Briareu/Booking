@@ -1,20 +1,24 @@
 package com.database.controller;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.database.entity.Pic;
+import com.database.mapper.PicMapper;
 import com.database.service.IPicService;
-
-import cn.hutool.core.lang.UUID;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/pic")
@@ -27,32 +31,31 @@ public class PicController {
 	@Value("${file-upload-path}")
 	private String pic_url;
 	
-	@PostMapping(path = "/savePic")
-	public String savePic(@RequestParam(value = "file") MultipartFile file, @RequestParam("reId") Integer hid) {
-		String fileName  = file.getOriginalFilename();
-		File saveFile = new File(pic_url);
-		if(!saveFile.exists()) {
-			saveFile.mkdir();
+	private PicMapper picMapper;
+	
+	private ObjectMapper mapper;
+	
+	@ResponseBody
+	@GetMapping("/getImgPathByHotel")
+	public String getImgPathByHotel(@RequestParam("hid") Integer hid) {
+		List<Pic> pics = picMapper.getPicByHotel(hid);
+		HashMap<String, List> map = new HashMap<>();
+		ArrayList<String> paths = new ArrayList<>();
+		if(pics != null && !pics.isEmpty()) {
+			for(Pic p : pics) {
+				paths.add(pic_url + p.getPicUrl());
+			}
 		}
+		map.put("paths", paths);
 		
-		Pic pic = new Pic();
-		
-		//拼接url
-		UUID uuid = UUID.randomUUID();
-		
-		//拼接后的url
-		String url = file.getOriginalFilename().replace(".", "") + uuid;
-		
-		//图片名称
-		String name = file.getOriginalFilename();
-		
-		pic.setPicUrl(url);
-		pic.setPicName(name);
-		pic.setHid(hid);
-		
-		picService.save(pic);
+		String result;
 		try {
-			file.
+			result = mapper.writeValueAsString(map);
+		}catch(JsonProcessingException e) {
+			e.printStackTrace();
+			return e.toString();
 		}
+		
+		return result;
 	}
 }

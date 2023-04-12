@@ -34,9 +34,6 @@ public class Pic implements Serializable {
 	@TableField("picUrl")
 	private String picUrl;
 	
-	@TableField("picName")
-	private String picName;
-	
 	@TableField("hid")
 	private Integer hid;
 }

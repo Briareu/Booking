@@ -31,6 +31,9 @@ public class Standard implements Serializable {
 	@TableId(value = "sid", type = IdType.AUTO)
 	private Integer sid;
 	
+	@TableId(value = "typeName")
+	private String typeName;
+	
 	@TableField("description")
 	private String description;
 	
@@ -43,6 +46,6 @@ public class Standard implements Serializable {
 	@TableField("price")
 	private String price;
 	
-	@TableField("people")
-	private Integer people;
+	@TableField("peopleNum")
+	private Integer peopleNum;
 }

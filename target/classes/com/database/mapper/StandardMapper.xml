@@ -9,7 +9,8 @@
         <result column="hid" property="hid" />
         <result column="totalNum" property="totalNum" />
         <result column="price" property="price" />
-        <result column="people" property="people" />
+        <result column="peopleNum" property="peopleNum" />
+        <result column="typeName" property="typeName" />
     </resultMap>
 
 </mapper>

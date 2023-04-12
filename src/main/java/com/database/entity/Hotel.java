@@ -28,15 +28,6 @@ public class Hotel implements Serializable {
 	@TableField("address")
 	private String address;
 	
-	@TableField("province")
-	private String province;
-	
-	@TableField("city")
-	private String city;
-	
-	@TableField("region")
-	private String region;
-	
 	@TableField("info")
 	private String info;
 	
@@ -49,8 +40,8 @@ public class Hotel implements Serializable {
 	@TableField("comment")
 	private String comment;
 	
-	@TableField("hName")
-	private String hName;
+	@TableField("name")
+	private String name;
 	
 	@TableField("score")
 	private Double score;

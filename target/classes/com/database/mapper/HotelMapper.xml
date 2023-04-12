@@ -6,15 +6,13 @@
     <resultMap id="BaseResultMap" type="com.database.entity.Hotel">
         <id column="hid" property="hid" />
         <result column="address" property="address" />
-        <result column="province" property="province" />
-        <result column="city" property="city" />
-        <result column="region" property="region" />
         <result column="info" property="info" />
         <result column="star" property="star" />
         <result column="type" property="type" />
         <result column="comment" property="comment" />
-        <result column="hName" property="hName" />
+        <result column="name" property="name" />
         <result column="score" property="score" />
+        <result column="facility" property="facility" />
     </resultMap>
 
 </mapper>
