@@ -66,4 +66,7 @@ public class Order implements Serializable {
 	
 	@TableField("sid")
 	private Integer sid;
+	
+	@TableField("hid")
+	private Integer hid;
 }

@@ -17,7 +17,7 @@ import com.database.service.IHotelService;
 import com.database.service.IStandardService;
 
 /**
- * 我还没想好放什么
+ * 放了一点
  * 前端控制器
  * @author RONG
  *
@@ -76,5 +76,62 @@ public class StandardController {
 		}
 		
 		return hotels;
+	}
+	
+	/**
+	 * 根据人数介于paramNum1和paramNum2条件来返回standard
+	 * @param peopleNum1
+	 * @param peopleNum2
+	 * @return
+	 */
+	@GetMapping(path = "/getByPeopelNum")
+	public List<Standard> getByPeopleNum(@RequestParam("peopleNum") String peopleNum1, @RequestParam("peopleNum") String peopleNum2){
+		System.err.println(peopleNum1);
+		QueryWrapper<Standard> queryWrapper1 = new QueryWrapper<>();
+		queryWrapper1.between("peopleNum", peopleNum1, peopleNum2);
+		List<Standard> standards = standardService.list(queryWrapper1);
+		
+		if(standards == null) {
+			return null;
+		}
+		
+		/*List<Hotel> hotels = new ArrayList<>();
+		for(Standard s: standards) {
+			QueryWrapper<Hotel> queryWrapper = new QueryWrapper<>();
+			queryWrapper.eq("hid", s.getHid());
+			List<Hotel> tmp = hotelService.list(queryWrapper);
+			hotels.addAll(tmp);
+		}
+		
+		return hotels;*/
+		return standards;
+	}
+	
+	/**
+	 * 根据price介于price1和price2返回standard
+	 * @param price1
+	 * @param price2
+	 * @return
+	 */
+	@GetMapping(path = "/getByPrice")
+	public List<Standard> getByPrice(@RequestParam("price") String price1, @RequestParam("price") String price2){
+		System.err.println(price1);
+		QueryWrapper<Standard> queryWrapper1 = new QueryWrapper<>();
+		queryWrapper1.between("price", price1, price2);
+		List<Standard> standards = standardService.list(queryWrapper1);
+		
+		if(standards == null) {
+			return null;
+		}
+		/*
+		List<Hotel> hotels = new ArrayList<>();
+		for(Standard s: standards) {
+			QueryWrapper<Hotel> queryWrapper = new QueryWrapper<>();
+			queryWrapper.eq("hid", s.getHid());
+			List<Hotel> tmp = hotelService.list(queryWrapper);
+			hotels.addAll(tmp);
+		}*/
+		
+		return standards;
 	}
 }

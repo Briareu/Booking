@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,21 +11,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.database.entity.Pic;
 import com.database.mapper.PicMapper;
-import com.database.service.IPicService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * 只有一个方法
+ * @author RONG
+ * @since 4/12/2023
+ */
 @RestController
 @RequestMapping("/pic")
 @CrossOrigin
 public class PicController {
-
-	@Autowired
-	private IPicService picService;
 	
 	@Value("${file-upload-path}")
 	private String pic_url;
@@ -35,6 +33,11 @@ public class PicController {
 	
 	private ObjectMapper mapper;
 	
+	/**
+	 * 根据hid返回图片路径
+	 * @param hid
+	 * @return
+	 */
 	@ResponseBody
 	@GetMapping("/getImgPathByHotel")
 	public String getImgPathByHotel(@RequestParam("hid") Integer hid) {

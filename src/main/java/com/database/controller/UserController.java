@@ -11,8 +11,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.database.entity.User;
 import com.database.service.IUserService;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * user控制器
  * @author RONG
