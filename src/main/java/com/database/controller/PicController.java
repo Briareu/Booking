@@ -1,9 +1,8 @@
 package com.database.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.database.entity.Pic;
-import com.database.mapper.PicMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.database.service.IPicService;
 
 /**
  * 只有一个方法
@@ -29,9 +28,8 @@ public class PicController {
 	@Value("${file-upload-path}")
 	private String pic_url;
 	
-	private PicMapper picMapper;
-	
-	private ObjectMapper mapper;
+	@Autowired
+	private IPicService picService;
 	
 	/**
 	 * 根据hid返回图片路径
@@ -39,26 +37,14 @@ public class PicController {
 	 * @return
 	 */
 	@ResponseBody
-	@GetMapping("/getImgPathByHotel")
-	public String getImgPathByHotel(@RequestParam("hid") Integer hid) {
-		List<Pic> pics = picMapper.getPicByHotel(hid);
-		HashMap<String, List> map = new HashMap<>();
-		ArrayList<String> paths = new ArrayList<>();
-		if(pics != null && !pics.isEmpty()) {
-			for(Pic p : pics) {
-				paths.add(pic_url + p.getPicUrl());
-			}
+	@GetMapping("/getPicByHotel")
+	public List<Pic> getPicByHotel(@RequestParam("hid") Integer hid) {
+		QueryWrapper<Pic> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("hid", hid);
+		List<Pic> pics = picService.list(queryWrapper);
+		for(Pic p : pics) {
+			p.setPicUrl(pic_url + p.getPicUrl()); 
 		}
-		map.put("paths", paths);
-		
-		String result;
-		try {
-			result = mapper.writeValueAsString(map);
-		}catch(JsonProcessingException e) {
-			e.printStackTrace();
-			return e.toString();
-		}
-		
-		return result;
+		return pics;
 	}
 }

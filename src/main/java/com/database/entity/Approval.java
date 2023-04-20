@@ -19,8 +19,8 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("like")
-public class Like implements Serializable {
+@TableName("Approval")
+public class Approval implements Serializable {
 
 	/**
 	 * 

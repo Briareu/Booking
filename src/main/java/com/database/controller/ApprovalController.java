@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.database.entity.Like;
-import com.database.service.ILikeService;
+import com.database.entity.Approval;
+import com.database.service.IApprovalService;
 
 /**
  * 基本的增删改查
@@ -25,18 +25,20 @@ import com.database.service.ILikeService;
 @RequestMapping("/like")
 @CrossOrigin
 @ResponseBody
-public class LikeController {
+public class ApprovalController {
 
 	@Autowired
-	private ILikeService likeService;
+	private IApprovalService likeService;
 	
 	/**
 	 * 根据用户返回收藏信息
 	 * @return
 	 */
 	@GetMapping("/getLikeByUid")
-	public List<Like> getLikeByUid(){
-		List<Like> likes = likeService.list();
+	public List<Approval> getLikeByUid(@RequestParam("uid") Integer uid){
+		QueryWrapper<Approval> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("uid", uid);
+		List<Approval> likes = likeService.list(queryWrapper);
 		return likes;
 	}
 	
@@ -46,8 +48,11 @@ public class LikeController {
 	 * @return
 	 */
 	@PostMapping("/addLike")
-	public String addLike(@RequestBody Like like) {
-		likeService.save(like);
+	public String addLike(@RequestBody Approval like) {
+		Approval tmp = new Approval();
+		tmp.setHid(like.getHid());
+		tmp.setUid(like.getUid());
+		likeService.save(tmp);
 		return "添加成功";
 	}
 	
@@ -57,13 +62,13 @@ public class LikeController {
 	 * @return
 	 */
 	@PostMapping("/changeLike")
-	public String changeLike(@RequestBody Like like) {
-		QueryWrapper<Like> queryWrapper = new QueryWrapper<>();
+	public String changeLike(@RequestBody Approval like) {
+		QueryWrapper<Approval> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("lid", like.getLid());
 		if(likeService.getOne(queryWrapper) == null) {
 			return "nolike";
 		}else {
-			Like thelike = likeService.getOne(queryWrapper);
+			Approval thelike = likeService.getOne(queryWrapper);
 			thelike.setHid(like.getHid());
 			thelike.setUid(like.getUid());
 			return "success";
@@ -77,7 +82,7 @@ public class LikeController {
 	 */
 	@GetMapping("/delLike")
 	public boolean delLike(@RequestParam("lid") Integer lid) {
-		QueryWrapper<Like> queryWrapper = new QueryWrapper<>();
+		QueryWrapper<Approval> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("lid", lid);
 		boolean del = likeService.remove(queryWrapper);
 		
