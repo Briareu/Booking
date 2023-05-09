@@ -29,7 +29,7 @@ public class UserController {
 	 * @param user
 	 * @return
 	 */
-	@PostMapping(path = "/registter")
+	@PostMapping(path = "/register")
 	public String register(@RequestBody User user) {
 		System.out.println(user.getName());
 		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
