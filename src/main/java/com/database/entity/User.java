@@ -42,7 +42,7 @@ public class User implements Serializable {/**
 	private String mail;
 	
 	@TableField("phone")
-	private String phone;
+	private Integer phone;
 	
 	@TableField("state")
 	private Integer state;
