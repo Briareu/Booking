@@ -5,7 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.database.entity.Standard">
         <id column="sid" property="sid" />
-        <result column="description" property="description" />
+        <result column="des" property="des" />
         <result column="hid" property="hid" />
         <result column="totalNum" property="totalNum" />
         <result column="price" property="price" />

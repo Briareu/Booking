@@ -1,6 +1,5 @@
 package com.database.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.database.entity.Hotel;
 import com.database.entity.Standard;
-import com.database.service.IHotelService;
 import com.database.service.IStandardService;
 
 /**
@@ -29,9 +26,6 @@ import com.database.service.IStandardService;
 public class StandardController {
 	@Autowired
 	private IStandardService standardService;
-	
-	@Autowired
-	private IHotelService hotelService;
 	
 	/**
 	 * 获取hotel全部standard信息
@@ -59,25 +53,15 @@ public class StandardController {
 	 * @return
 	 */
 	@GetMapping(path = "/getByDescription")
-	public List<Hotel> getByDescription(@RequestParam("description") String description){
-		System.err.println(description);
+	public List<Standard> getByDescription(@RequestParam("des") String des){
+		System.err.println(des);
 		QueryWrapper<Standard> queryWrapper1 = new QueryWrapper<>();
-		queryWrapper1.eq("description", description);
+		queryWrapper1.eq("des", des);
 		List<Standard> standards = standardService.list(queryWrapper1);
-		
 		if(standards == null) {
 			return null;
 		}
-		
-		List<Hotel> hotels = new ArrayList<>();
-		for(Standard s: standards) {
-			QueryWrapper<Hotel> queryWrapper = new QueryWrapper<>();
-			queryWrapper.eq("hid", s.getHid());
-			List<Hotel> tmp = hotelService.list(queryWrapper);
-			hotels.addAll(tmp);
-		}
-		
-		return hotels;
+		return standards;
 	}
 	
 	/**

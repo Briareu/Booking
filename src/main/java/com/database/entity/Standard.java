@@ -34,8 +34,8 @@ public class Standard implements Serializable {
 	@TableId(value = "typeName")
 	private String typeName;
 	
-	@TableField("description")
-	private String description;
+	@TableField("des")
+	private String des;
 	
 	@TableField("hid")
 	private Integer hid;
