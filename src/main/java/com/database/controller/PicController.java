@@ -21,7 +21,7 @@ import com.database.service.IPicService;
  * @since 4/12/2023
  */
 @RestController
-@RequestMapping("/pic")
+@RequestMapping(value = "/pic", produces = "text/html;charset=utf8")
 @CrossOrigin
 public class PicController {
 	

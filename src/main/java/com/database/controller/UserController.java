@@ -15,6 +15,7 @@ import com.database.service.IUserService;
  * user控制器
  * @author RONG
  * @since 2023-04-03
+ * lateset debuged 05-11(fixed all)
  */
 @RestController
 @RequestMapping(value = "/user", produces = "text/html;charset=utf8")
@@ -26,6 +27,7 @@ public class UserController {
 	
 	/**
 	 * 根据手机号进行注册，只对手机号进行判重
+	 * 对手机号进行格式判定
 	 * @param user
 	 * @return
 	 */
@@ -36,6 +38,9 @@ public class UserController {
 		queryWrapper.eq("phone", user.getPhone());
 		if(userService.getOne(queryWrapper) != null) {
 			return "该用户名已经存在";
+		}
+		if(user.getPhone().length() != 11) {
+			return "手机号长度错误";
 		}
 
 		User newuser = new User();
