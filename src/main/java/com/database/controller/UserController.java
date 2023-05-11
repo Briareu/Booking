@@ -28,6 +28,8 @@ public class UserController {
 	 * 根据手机号进行注册，只对手机号进行判重
 	 * @param user
 	 * @return
+	 * 
+	 * 05-11fixed
 	 */
 	@PostMapping(path = "/register")
 	public String register(@RequestBody User user) {

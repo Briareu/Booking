@@ -1,8 +1,8 @@
 package com.database.entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
+import org.joda.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
@@ -10,6 +10,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.joda.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.joda.ser.LocalDateTimeSerializer;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -49,6 +53,8 @@ public class Order implements Serializable {
 	/**
 	 * 创建时间：有数据库自动insert
 	 */
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@TableField(value = "createTime", fill = FieldFill.INSERT)
 	private LocalDateTime createTime;
@@ -56,10 +62,14 @@ public class Order implements Serializable {
 	@TableField("state")
 	private String state;
 
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@TableField("startTime")
 	private LocalDateTime startTime;
 	
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@TableField("endTime")
 	private LocalDateTime endTime;

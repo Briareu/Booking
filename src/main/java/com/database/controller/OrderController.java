@@ -3,7 +3,9 @@ package com.database.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,12 +20,17 @@ import com.database.entity.Order;
 import com.database.entity.Standard;
 import com.database.service.IOrderService;
 import com.database.service.IStandardService;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 大概增删改查
  * @author RONG
  * @since 4/12/2023
  */
+
+@Slf4j
 @RestController
 @RequestMapping(value = "/order", produces = {"text/html;charset=utf8", "application/json;charset=utf8"})
 @CrossOrigin
@@ -103,10 +110,20 @@ public class OrderController {
 	 * @return
 	 */
 	@PostMapping("/addOrder")
-	public String addOrder(@RequestBody Order order) {
-		System.err.println(order.getHid());
-		orderService.save(order);
-		return "注册成功";
+	public String addOrder(@RequestBody Order order,
+			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startTime, 
+			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime) {
+		System.err.println(endTime);
+		Order neword = new Order();
+		neword.setEndTime(endTime);
+		neword.setHid(order.getHid());
+		neword.setSid(order.getSid());
+		neword.setStartTime(startTime);
+		neword.setState(order.getState());
+		neword.setTotalPrice(order.getTotalPrice());
+		neword.setUid(order.getUid());
+		orderService.save(neword);
+		return "success";
 	}
 	
 	/**

@@ -28,6 +28,9 @@ public class Hotel implements Serializable {
 	@TableField("address")
 	private String address;
 	
+	@TableField("city")
+	private String city;
+	
 	@TableField("info")
 	private String info;
 	

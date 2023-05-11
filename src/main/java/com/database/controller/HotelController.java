@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.database.entity.Hotel;
-import com.database.service.IHotelService;
+import com.database.entity.*;
+import com.database.service.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/hotel")
@@ -19,6 +22,8 @@ import com.database.service.IHotelService;
 public class HotelController {
 	@Autowired
 	private IHotelService hotelService;
+	private IOrderService orderService;
+	private IStandardService standardService;
 	
 	/**
 	 * gethotel
@@ -35,5 +40,49 @@ public class HotelController {
 		}else {
 			return hotel;
 		}
+	}
+	
+	/**
+	 * searchhotel
+	 * @param city,startDate,endDate,name
+	 * @return
+	 */
+	@GetMapping("/searchHotel")
+	public List<Hotel> searchHotel(@RequestParam(value="city",required=false) String city,@RequestParam(value="startDate",required=false) Date startDate,
+			@RequestParam(value="endDate",required=false) Date endDate,@RequestParam(value="name",required=false) String name) {
+		QueryWrapper<Hotel> queryHotel=new QueryWrapper<Hotel>();
+		QueryWrapper<Order> queryOrder=new QueryWrapper<Order>();
+		QueryWrapper<Standard> queryStandard=new QueryWrapper<Standard>();
+		if(city!=null) {
+			queryHotel.like("city", city);
+		}
+		if(name!=null) {
+			queryHotel.like("name", name);
+		}
+		List<Hotel> hotels=hotelService.list(queryHotel);
+		if(startDate!=null&&endDate!=null) {
+			List<Integer> hidList=hotels.stream().map(Hotel::getHid).collect(Collectors.toList()); //hid列表
+			Set<Integer> hidSet=new HashSet<Integer>(hidList); //hid集合
+			queryStandard.in("hid", hidSet);
+			List<Standard> standards=standardService.list(queryStandard);  
+			List<Integer> sidList=standards.stream().map(Standard::getSid).collect(Collectors.toList()); //sid列表
+			Set<Integer> sidSet=new HashSet<Integer>(sidList); //sid集合
+			queryOrder.in("sid", sidSet);
+			
+			queryOrder.notBetween("startTime", startDate, endDate).notBetween("endTime", startDate, endDate);
+			List<Order> orderList=orderService.list(queryOrder);
+			List<Integer> sidList1=orderList.stream().map(Order::getSid).collect(Collectors.toList()); //筛选后的sid列表
+			Set<Integer> sidSet1=new HashSet<Integer>(sidList1); //筛选后的sid集合
+			
+			queryStandard.in("sid", sidSet1);
+			List<Standard> standards1=standardService.list(queryStandard);
+			List<Integer> hidList1=standards1.stream().map(Standard::getHid).collect(Collectors.toList()); //筛选后的hid列表
+			Set<Integer> hidSet1=new HashSet<Integer>(hidList1); //筛选后的hid集合
+			
+			queryHotel.in("hid", hidSet1);
+			hotels=hotelService.list(queryHotel);
+		}
+		
+		return hotels;
 	}
 }

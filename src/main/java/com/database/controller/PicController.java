@@ -19,6 +19,8 @@ import com.database.service.IPicService;
  * 只有一个方法
  * @author RONG
  * @since 4/12/2023
+ * 
+ * 05-11fixed
  */
 @RestController
 @RequestMapping(value = "/pic", produces = {"text/html;charset=utf8", "application/json;charset=utf8"})

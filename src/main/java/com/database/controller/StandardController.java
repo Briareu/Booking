@@ -1,5 +1,6 @@
 package com.database.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.database.entity.Hotel;
 import com.database.entity.Standard;
+import com.database.service.IHotelService;
 import com.database.service.IStandardService;
 
 /**
@@ -26,10 +29,14 @@ public class StandardController {
 	@Autowired
 	private IStandardService standardService;
 	
+	@Autowired
+	private IHotelService hotelService;
+	
 	/**
 	 * 获取hotel全部standard信息
 	 * @param hid
 	 * @return
+	 * 05-11checked
 	 */
 	@GetMapping(value = "/getByHotel")
 	public List<Standard> getByHotel(@RequestParam("hid") Integer hid){
@@ -46,9 +53,11 @@ public class StandardController {
 	}
 	
 	/**
-	 * 根据标准返回酒店
+	 * 根据标准返回房型
 	 * @param description
 	 * @return
+	 * 
+	 * 05-11fixed
 	 */
 	@GetMapping(path = "/getByDescription")
 	public List<Standard> getByDescription(@RequestParam("des") String des){
@@ -63,13 +72,43 @@ public class StandardController {
 	}
 	
 	/**
+	 * 根据标准返回酒店
+	 * @param des
+	 * @return
+	 * 
+	 * 05-11fixed
+	 */
+	@GetMapping(path = "/getHotelByDescription")
+	public List<Hotel> getHotelByDescription(@RequestParam("des") String des){
+		System.err.println(des);
+		QueryWrapper<Standard> queryWrapper1 = new QueryWrapper<>();
+		queryWrapper1.eq("des", des);
+		List<Standard> standards = standardService.list(queryWrapper1);
+		if(standards == null) {
+			return null;
+		}
+		
+		List<Hotel> hotels = new ArrayList<>();
+		for(Standard s : standards) {
+			QueryWrapper<Hotel> queryWrapper2 = new QueryWrapper<>();
+			queryWrapper2.eq("hid", s.getHid());
+			Hotel tmp = hotelService.getOne(queryWrapper2);
+			hotels.add(tmp);
+		}
+		
+		return hotels;
+	}
+	
+	/**
 	 * 根据人数介于paramNum1和paramNum2条件来返回standard
 	 * @param peopleNum1
 	 * @param peopleNum2
 	 * @return
+	 * 
+	 * 05-11fixed
 	 */
 	@GetMapping(path = "/getByPeopelNum")
-	public List<Standard> getByPeopleNum(@RequestParam("peopleNum") String peopleNum1, @RequestParam("peopleNum") String peopleNum2){
+	public List<Standard> getByPeopleNum(@RequestParam("peopleNum1") String peopleNum1, @RequestParam("peopleNum2") String peopleNum2){
 		System.err.println(peopleNum1);
 		QueryWrapper<Standard> queryWrapper1 = new QueryWrapper<>();
 		queryWrapper1.between("peopleNum", peopleNum1, peopleNum2);
@@ -92,13 +131,45 @@ public class StandardController {
 	}
 	
 	/**
+	 * 根据人数介于paramNum1和paramNum2条件来返回hotel
+	 * @param peopleNum1
+	 * @param peopleNum2
+	 * @return
+	 * 
+	 * 05-11fixed
+	 */
+	@GetMapping(path = "/getHotelByPeopelNum")
+	public List<Hotel> getHotelByPeopleNum(@RequestParam("peopleNum1") String peopleNum1, @RequestParam("peopleNum2") String peopleNum2){
+		System.err.println(peopleNum1);
+		QueryWrapper<Standard> queryWrapper1 = new QueryWrapper<>();
+		queryWrapper1.between("peopleNum", peopleNum1, peopleNum2);
+		List<Standard> standards = standardService.list(queryWrapper1);
+		
+		if(standards == null) {
+			return null;
+		}
+		
+		List<Hotel> hotels = new ArrayList<>();
+		for(Standard s: standards) {
+			QueryWrapper<Hotel> queryWrapper = new QueryWrapper<>();
+			queryWrapper.eq("hid", s.getHid());
+			List<Hotel> tmp = hotelService.list(queryWrapper);
+			hotels.addAll(tmp);
+		}
+		
+		return hotels;
+	}
+	
+	/**
 	 * 根据price介于price1和price2返回standard
 	 * @param price1
 	 * @param price2
 	 * @return
+	 * 
+	 * 05-11fixed
 	 */
 	@GetMapping(path = "/getByPrice")
-	public List<Standard> getByPrice(@RequestParam("price") String price1, @RequestParam("price") String price2){
+	public List<Standard> getByPrice(@RequestParam("price1") String price1, @RequestParam("price2") String price2){
 		System.err.println(price1);
 		QueryWrapper<Standard> queryWrapper1 = new QueryWrapper<>();
 		queryWrapper1.between("price", price1, price2);
@@ -117,5 +188,35 @@ public class StandardController {
 		}*/
 		
 		return standards;
+	}
+	
+	/**
+	 * 根据price介于price1和price2返回hotel
+	 * @param price1
+	 * @param price2
+	 * @return
+	 * 
+	 * 05-11fixed
+	 */
+	@GetMapping(path = "/getHotelByPrice")
+	public List<Hotel> getHotelByPrice(@RequestParam("price1") String price1, @RequestParam("price2") String price2){
+		System.err.println(price1);
+		QueryWrapper<Standard> queryWrapper1 = new QueryWrapper<>();
+		queryWrapper1.between("price", price1, price2);
+		List<Standard> standards = standardService.list(queryWrapper1);
+		
+		if(standards == null) {
+			return null;
+		}
+		
+		List<Hotel> hotels = new ArrayList<>();
+		for(Standard s: standards) {
+			QueryWrapper<Hotel> queryWrapper = new QueryWrapper<>();
+			queryWrapper.eq("hid", s.getHid());
+			List<Hotel> tmp = hotelService.list(queryWrapper);
+			hotels.addAll(tmp);
+		}
+		
+		return hotels;
 	}
 }
