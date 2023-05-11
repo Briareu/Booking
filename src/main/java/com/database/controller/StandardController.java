@@ -20,7 +20,7 @@ import com.database.service.IStandardService;
  *
  */
 @RestController
-@RequestMapping(value = "/standard", produces = "text/html;charset=utf8")
+@RequestMapping(value = "/standard", produces = {"text/html;charset=utf8", "application/json;charset=utf8"})
 @CrossOrigin
 public class StandardController {
 	@Autowired
@@ -31,7 +31,7 @@ public class StandardController {
 	 * @param hid
 	 * @return
 	 */
-	@GetMapping(value = "/getByHotel", produces = "text/html;charset=utf8")
+	@GetMapping(value = "/getByHotel")
 	public List<Standard> getByHotel(@RequestParam("hid") Integer hid){
 		System.err.println(hid);
 		QueryWrapper<Standard> queryWrapper1 = new QueryWrapper<>();

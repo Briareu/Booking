@@ -17,7 +17,7 @@ import com.database.service.IUserService;
  * @since 2023-04-03
  */
 @RestController
-@RequestMapping(value = "/user", produces = "text/html;charset=utf8")
+@RequestMapping(value = "/user", produces = {"text/html;charset=utf8", "application/json;charset=utf8"})
 @CrossOrigin
 public class UserController {
 	
