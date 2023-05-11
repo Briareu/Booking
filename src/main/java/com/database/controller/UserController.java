@@ -17,7 +17,7 @@ import com.database.service.IUserService;
  * @since 2023-04-03
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping(value = "/user", produces = "text/html;charset=utf8")
 @CrossOrigin
 public class UserController {
 	
@@ -58,7 +58,7 @@ public class UserController {
 	@PostMapping(path = "/login")
 	public Object login(@RequestBody User loginuser) {
 		System.out.println(loginuser.toString());
-		Integer phone = loginuser.getPhone();
+		String phone = loginuser.getPhone();
 		String pwd = loginuser.getPwd();
 		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("phone", phone);

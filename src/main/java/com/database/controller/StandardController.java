@@ -20,7 +20,7 @@ import com.database.service.IStandardService;
  *
  */
 @RestController
-@RequestMapping("/standard")
+@RequestMapping(value = "/standard", produces = "text/html;charset=utf8")
 @CrossOrigin
 public class StandardController {
 	@Autowired
