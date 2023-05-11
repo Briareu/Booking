@@ -25,7 +25,7 @@ import com.database.service.IStandardService;
  * @since 4/12/2023
  */
 @RestController
-@RequestMapping(value = "/order", produces = "text/html;charset=utf8")
+@RequestMapping("/order")
 @CrossOrigin
 @ResponseBody
 public class OrderController {

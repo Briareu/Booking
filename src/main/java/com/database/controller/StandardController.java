@@ -17,11 +17,10 @@ import com.database.service.IStandardService;
  * 放了一点
  * 前端控制器
  * @author RONG
- * @since 04-03
- * 
+ *
  */
 @RestController
-@RequestMapping(value = "/standard", produces = "text/html;charset=utf8")
+@RequestMapping("/standard")
 @CrossOrigin
 public class StandardController {
 	@Autowired
@@ -31,7 +30,6 @@ public class StandardController {
 	 * 获取hotel全部standard信息
 	 * @param hid
 	 * @return
-	 * fixed
 	 */
 	@GetMapping(path = "/getByHotel")
 	public List<Standard> getByHotel(@RequestParam("hid") Integer hid){
