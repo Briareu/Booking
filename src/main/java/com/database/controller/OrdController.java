@@ -1,9 +1,9 @@
 package com.database.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,17 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.database.entity.Order;
+import com.database.entity.Message;
+import com.database.entity.Ord;
 import com.database.entity.Standard;
-import com.database.service.IOrderService;
+import com.database.service.IOrdService;
 import com.database.service.IStandardService;
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 大概增删改查
@@ -30,25 +27,23 @@ import lombok.extern.slf4j.Slf4j;
  * @since 4/12/2023
  */
 
-@Slf4j
 @RestController
 @RequestMapping(value = "/order", produces = {"text/html;charset=utf8", "application/json;charset=utf8"})
 @CrossOrigin
-@ResponseBody
-public class OrderController {
+public class OrdController {
 
 	@Autowired
-	private IOrderService orderService;
+	private IOrdService orderService;
 	
 	@Autowired
 	private IStandardService standardService;
 	
 	@GetMapping("/getByUid")
-	public List<Order> getByUid(@RequestParam("uid") Integer uid){
+	public List<Ord> getByUid(@RequestParam("uid") Integer uid){
 		System.err.println(uid);
-		QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+		QueryWrapper<Ord> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("uid", uid);
-		List<Order> orders = orderService.list(queryWrapper);
+		List<Ord> orders = orderService.list(queryWrapper);
 		
 		if(orders == null) {
 			return null;
@@ -64,11 +59,11 @@ public class OrderController {
 	 * @return
 	 */
 	@GetMapping("/getByUidAndState")
-	public List<Order> getByUidAndState(@RequestParam("uid") Integer uid, @RequestParam("state") String state){
+	public List<Ord> getByUidAndState(@RequestParam("uid") Integer uid, @RequestParam("state") String state){
 		System.err.println(uid);
-		QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+		QueryWrapper<Ord> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("uid", uid).eq("state", state);
-		List<Order> orders = orderService.list(queryWrapper);
+		List<Ord> orders = orderService.list(queryWrapper);
 		
 		if(orders == null) {
 			return null;
@@ -83,21 +78,21 @@ public class OrderController {
 	 * @return
 	 */
 	@GetMapping("/getByhid")
-	public List<Order> getByhid(@RequestParam("hid") Integer hid){
+	public List<Ord> getByhid(@RequestParam("hid") Integer hid){
 		System.out.println(hid);
 		QueryWrapper<Standard> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("hid", hid);
 		List<Standard> standards = standardService.list(queryWrapper);
-		List<Order> orders = new ArrayList<>();
+		List<Ord> orders = new ArrayList<>();
 		
 		if(standards == null) {
 			return null;
 		}
 		
 		for(Standard itr : standards) {
-			QueryWrapper<Order> queryWrapper2 = new QueryWrapper<>();
+			QueryWrapper<Ord> queryWrapper2 = new QueryWrapper<>();
 			queryWrapper2.eq("sid", itr.getSid());
-			List<Order> tmp = orderService.list(queryWrapper2);
+			List<Ord> tmp = orderService.list(queryWrapper2);
 			orders.addAll(tmp);
 		}
 		
@@ -110,20 +105,20 @@ public class OrderController {
 	 * @return
 	 */
 	@PostMapping("/addOrder")
-	public String addOrder(@RequestBody Order order,
+	public Message addOrder(@RequestBody Ord order,
 			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startTime, 
 			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime) {
-		System.err.println(endTime);
-		Order neword = new Order();
+		Ord neword = new Ord();
 		neword.setEndTime(endTime);
-		neword.setHid(order.getHid());
 		neword.setSid(order.getSid());
 		neword.setStartTime(startTime);
 		neword.setState(order.getState());
 		neword.setTotalPrice(order.getTotalPrice());
 		neword.setUid(order.getUid());
 		orderService.save(neword);
-		return "success";
+		Message m = new Message();
+		m.setMessage("success");
+		return m;
 	}
 	
 	/**
@@ -132,16 +127,15 @@ public class OrderController {
 	 * @return
 	 */
 	@PostMapping("/changeOrder")
-	public String changeOrder(@RequestBody Order order) {
+	public String changeOrder(@RequestBody Ord order) {
 		System.err.println(order.getOid());
-		QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+		QueryWrapper<Ord> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("oid", order.getOid());
 		if(orderService.getOne(queryWrapper) == null) {
 			return "noOrder";
 		}else {
-			Order theorder = orderService.getOne(queryWrapper);
+			Ord theorder = orderService.getOne(queryWrapper);
 			theorder.setEndTime(order.getEndTime());
-			theorder.setHid(order.getHid());
 			theorder.setSid(order.getSid());
 			theorder.setStartTime(order.getStartTime());
 			theorder.setState(order.getState());
@@ -159,7 +153,7 @@ public class OrderController {
 	 */
 	@GetMapping("/delOrder")
 	public boolean delOrder(@RequestParam("oid") Integer oid) {
-		QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+		QueryWrapper<Ord> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("oid", oid);
 		boolean del = orderService.remove(queryWrapper);
 		return del;

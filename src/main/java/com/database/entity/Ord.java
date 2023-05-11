@@ -1,8 +1,9 @@
 package com.database.entity;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Date;
 
-import org.joda.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
@@ -10,6 +11,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.joda.deser.LocalDateTimeDeserializer;
@@ -30,8 +32,8 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("order")
-public class Order implements Serializable {
+@TableName("ord")
+public class Ord implements Serializable {
 
 	/**
 	 * 
@@ -53,30 +55,21 @@ public class Order implements Serializable {
 	/**
 	 * 创建时间：有数据库自动insert
 	 */
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@TableField(value = "createTime", fill = FieldFill.INSERT)
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@TableField(value = "createTime")
 	private LocalDateTime createTime;
 	
 	@TableField("state")
 	private String state;
 
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@TableField("startTime")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@TableField(value = "startTime")
 	private LocalDateTime startTime;
 	
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@TableField("endTime")
 	private LocalDateTime endTime;
 	
 	@TableField("sid")
 	private Integer sid;
-	
-	@TableField("hid")
-	private Integer hid;
 }

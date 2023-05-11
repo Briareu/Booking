@@ -1,8 +1,8 @@
 package com.database.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.database.entity.Order;
+import com.database.entity.Ord;
 
-public interface IOrderService extends IService<Order> {
+public interface IOrdService extends IService<Ord> {
 
 }

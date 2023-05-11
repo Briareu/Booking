@@ -32,7 +32,7 @@ public class UserController {
 	 * 05-11fixed
 	 */
 	@PostMapping(path = "/register")
-	public String register(@RequestBody User user) {
+	public Object register(@RequestBody User user) {
 		System.out.println(user.getName());
 		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("phone", user.getPhone());

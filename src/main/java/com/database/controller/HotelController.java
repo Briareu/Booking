@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class HotelController {
 	@Autowired
 	private IHotelService hotelService;
-	private IOrderService orderService;
+	private IOrdService orderService;
 	private IStandardService standardService;
 	
 	/**
@@ -51,7 +51,7 @@ public class HotelController {
 	public List<Hotel> searchHotel(@RequestParam(value="city",required=false) String city,@RequestParam(value="startDate",required=false) Date startDate,
 			@RequestParam(value="endDate",required=false) Date endDate,@RequestParam(value="name",required=false) String name) {
 		QueryWrapper<Hotel> queryHotel=new QueryWrapper<Hotel>();
-		QueryWrapper<Order> queryOrder=new QueryWrapper<Order>();
+		QueryWrapper<Ord> queryOrder=new QueryWrapper<Ord>();
 		QueryWrapper<Standard> queryStandard=new QueryWrapper<Standard>();
 		if(city!=null) {
 			queryHotel.like("city", city);
@@ -70,8 +70,8 @@ public class HotelController {
 			queryOrder.in("sid", sidSet);
 			
 			queryOrder.notBetween("startTime", startDate, endDate).notBetween("endTime", startDate, endDate);
-			List<Order> orderList=orderService.list(queryOrder);
-			List<Integer> sidList1=orderList.stream().map(Order::getSid).collect(Collectors.toList()); //筛选后的sid列表
+			List<Ord> orderList=orderService.list(queryOrder);
+			List<Integer> sidList1=orderList.stream().map(Ord::getSid).collect(Collectors.toList()); //筛选后的sid列表
 			Set<Integer> sidSet1=new HashSet<Integer>(sidList1); //筛选后的sid集合
 			
 			queryStandard.in("sid", sidSet1);
