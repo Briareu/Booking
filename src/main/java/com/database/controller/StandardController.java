@@ -31,7 +31,7 @@ public class StandardController {
 	 * @param hid
 	 * @return
 	 */
-	@GetMapping(path = "/getByHotel")
+	@GetMapping(value = "/getByHotel", produces = "text/html;charset=utf8")
 	public List<Standard> getByHotel(@RequestParam("hid") Integer hid){
 		System.err.println(hid);
 		QueryWrapper<Standard> queryWrapper1 = new QueryWrapper<>();
