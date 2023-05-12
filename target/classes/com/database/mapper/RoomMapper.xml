@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.database.mapper.StandardMapper">
+<mapper namespace="com.database.mapper.RoomMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.database.entity.Standard">
+    <resultMap id="BaseResultMap" type="com.database.entity.Room">
         <id column="sid" property="sid" />
         <result column="des" property="des" />
         <result column="hid" property="hid" />
         <result column="totalNum" property="totalNum" />
         <result column="price" property="price" />
         <result column="peopleNum" property="peopleNum" />
-        <result column="typeName" property="typeName" />
+        <result column="roomtype" property="roomtype" />
     </resultMap>
 
 </mapper>

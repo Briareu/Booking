@@ -23,7 +23,7 @@ public class HotelController {
 	@Autowired
 	private IHotelService hotelService;
 	private IOrdService orderService;
-	private IStandardService standardService;
+	private IRoomService standardService;
 	
 	/**
 	 * gethotel
@@ -52,7 +52,7 @@ public class HotelController {
 			@RequestParam(value="endDate",required=false) Date endDate,@RequestParam(value="name",required=false) String name) {
 		QueryWrapper<Hotel> queryHotel=new QueryWrapper<Hotel>();
 		QueryWrapper<Ord> queryOrder=new QueryWrapper<Ord>();
-		QueryWrapper<Standard> queryStandard=new QueryWrapper<Standard>();
+		QueryWrapper<Room> queryStandard=new QueryWrapper<Room>();
 		if(city!=null) {
 			queryHotel.like("city", city);
 		}
@@ -64,8 +64,8 @@ public class HotelController {
 			List<Integer> hidList=hotels.stream().map(Hotel::getHid).collect(Collectors.toList()); //hid列表
 			Set<Integer> hidSet=new HashSet<Integer>(hidList); //hid集合
 			queryStandard.in("hid", hidSet);
-			List<Standard> standards=standardService.list(queryStandard);  
-			List<Integer> sidList=standards.stream().map(Standard::getSid).collect(Collectors.toList()); //sid列表
+			List<Room> standards=standardService.list(queryStandard);  
+			List<Integer> sidList=standards.stream().map(Room::getSid).collect(Collectors.toList()); //sid列表
 			Set<Integer> sidSet=new HashSet<Integer>(sidList); //sid集合
 			queryOrder.in("sid", sidSet);
 			
@@ -75,8 +75,8 @@ public class HotelController {
 			Set<Integer> sidSet1=new HashSet<Integer>(sidList1); //筛选后的sid集合
 			
 			queryStandard.in("sid", sidSet1);
-			List<Standard> standards1=standardService.list(queryStandard);
-			List<Integer> hidList1=standards1.stream().map(Standard::getHid).collect(Collectors.toList()); //筛选后的hid列表
+			List<Room> standards1=standardService.list(queryStandard);
+			List<Integer> hidList1=standards1.stream().map(Room::getHid).collect(Collectors.toList()); //筛选后的hid列表
 			Set<Integer> hidSet1=new HashSet<Integer>(hidList1); //筛选后的hid集合
 			
 			queryHotel.in("hid", hidSet1);

@@ -20,8 +20,8 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("standard")
-public class Standard implements Serializable {
+@TableName("room")
+public class Room implements Serializable {
 
 	/**
 	 * 
@@ -31,8 +31,8 @@ public class Standard implements Serializable {
 	@TableId(value = "sid", type = IdType.AUTO)
 	private Integer sid;
 	
-	@TableId(value = "typeName")
-	private String typeName;
+	@TableId(value = "roomtype")
+	private String roomtype;
 	
 	@TableField("des")
 	private String des;

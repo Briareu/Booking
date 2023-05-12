@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.database.entity.Message;
 import com.database.entity.Ord;
-import com.database.entity.Standard;
+import com.database.entity.Room;
 import com.database.service.IOrdService;
-import com.database.service.IStandardService;
+import com.database.service.IRoomService;
 
 /**
  * 大概增删改查
@@ -28,7 +28,7 @@ import com.database.service.IStandardService;
  */
 
 @RestController
-@RequestMapping(value = "/order", produces = {"text/html;charset=utf8", "application/json;charset=utf8"})
+@RequestMapping(value = "/ord", produces = {"text/html;charset=utf8", "application/json;charset=utf8"})
 @CrossOrigin
 public class OrdController {
 
@@ -36,7 +36,7 @@ public class OrdController {
 	private IOrdService orderService;
 	
 	@Autowired
-	private IStandardService standardService;
+	private IRoomService standardService;
 	
 	@GetMapping("/getByUid")
 	public List<Ord> getByUid(@RequestParam("uid") Integer uid){
@@ -80,16 +80,16 @@ public class OrdController {
 	@GetMapping("/getByhid")
 	public List<Ord> getByhid(@RequestParam("hid") Integer hid){
 		System.out.println(hid);
-		QueryWrapper<Standard> queryWrapper = new QueryWrapper<>();
+		QueryWrapper<Room> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("hid", hid);
-		List<Standard> standards = standardService.list(queryWrapper);
+		List<Room> standards = standardService.list(queryWrapper);
 		List<Ord> orders = new ArrayList<>();
 		
 		if(standards == null) {
 			return null;
 		}
 		
-		for(Standard itr : standards) {
+		for(Room itr : standards) {
 			QueryWrapper<Ord> queryWrapper2 = new QueryWrapper<>();
 			queryWrapper2.eq("sid", itr.getSid());
 			List<Ord> tmp = orderService.list(queryWrapper2);

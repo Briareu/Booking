@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.database.entity.Hotel;
-import com.database.entity.Standard;
+import com.database.entity.Room;
 import com.database.service.IHotelService;
-import com.database.service.IStandardService;
+import com.database.service.IRoomService;
 
 /**
  * 放了一点
@@ -23,11 +23,11 @@ import com.database.service.IStandardService;
  *
  */
 @RestController
-@RequestMapping(value = "/standard", produces = {"text/html;charset=utf8", "application/json;charset=utf8"})
+@RequestMapping(value = "/room", produces = {"text/html;charset=utf8", "application/json;charset=utf8"})
 @CrossOrigin
-public class StandardController {
+public class RoomController {
 	@Autowired
-	private IStandardService standardService;
+	private IRoomService standardService;
 	
 	@Autowired
 	private IHotelService hotelService;
@@ -39,11 +39,11 @@ public class StandardController {
 	 * 05-11checked
 	 */
 	@GetMapping(value = "/getByHotel")
-	public List<Standard> getByHotel(@RequestParam("hid") Integer hid){
+	public List<Room> getByHotel(@RequestParam("hid") Integer hid){
 		System.err.println(hid);
-		QueryWrapper<Standard> queryWrapper1 = new QueryWrapper<>();
+		QueryWrapper<Room> queryWrapper1 = new QueryWrapper<>();
 		queryWrapper1.eq("hid", hid);
-		List<Standard> standards = standardService.list(queryWrapper1);
+		List<Room> standards = standardService.list(queryWrapper1);
 		
 		if(standards == null) {
 			return null;
@@ -60,11 +60,11 @@ public class StandardController {
 	 * 05-11fixed
 	 */
 	@GetMapping(path = "/getByDescription")
-	public List<Standard> getByDescription(@RequestParam("des") String des){
+	public List<Room> getByDescription(@RequestParam("des") String des){
 		System.err.println(des);
-		QueryWrapper<Standard> queryWrapper1 = new QueryWrapper<>();
+		QueryWrapper<Room> queryWrapper1 = new QueryWrapper<>();
 		queryWrapper1.eq("des", des);
-		List<Standard> standards = standardService.list(queryWrapper1);
+		List<Room> standards = standardService.list(queryWrapper1);
 		if(standards == null) {
 			return null;
 		}
@@ -81,15 +81,15 @@ public class StandardController {
 	@GetMapping(path = "/getHotelByDescription")
 	public List<Hotel> getHotelByDescription(@RequestParam("des") String des){
 		System.err.println(des);
-		QueryWrapper<Standard> queryWrapper1 = new QueryWrapper<>();
+		QueryWrapper<Room> queryWrapper1 = new QueryWrapper<>();
 		queryWrapper1.eq("des", des);
-		List<Standard> standards = standardService.list(queryWrapper1);
+		List<Room> standards = standardService.list(queryWrapper1);
 		if(standards == null) {
 			return null;
 		}
 		
 		List<Hotel> hotels = new ArrayList<>();
-		for(Standard s : standards) {
+		for(Room s : standards) {
 			QueryWrapper<Hotel> queryWrapper2 = new QueryWrapper<>();
 			queryWrapper2.eq("hid", s.getHid());
 			Hotel tmp = hotelService.getOne(queryWrapper2);
@@ -108,11 +108,11 @@ public class StandardController {
 	 * 05-11fixed
 	 */
 	@GetMapping(path = "/getByPeopelNum")
-	public List<Standard> getByPeopleNum(@RequestParam("peopleNum1") String peopleNum1, @RequestParam("peopleNum2") String peopleNum2){
+	public List<Room> getByPeopleNum(@RequestParam("peopleNum1") String peopleNum1, @RequestParam("peopleNum2") String peopleNum2){
 		System.err.println(peopleNum1);
-		QueryWrapper<Standard> queryWrapper1 = new QueryWrapper<>();
+		QueryWrapper<Room> queryWrapper1 = new QueryWrapper<>();
 		queryWrapper1.between("peopleNum", peopleNum1, peopleNum2);
-		List<Standard> standards = standardService.list(queryWrapper1);
+		List<Room> standards = standardService.list(queryWrapper1);
 		
 		if(standards == null) {
 			return null;
@@ -141,16 +141,16 @@ public class StandardController {
 	@GetMapping(path = "/getHotelByPeopelNum")
 	public List<Hotel> getHotelByPeopleNum(@RequestParam("peopleNum1") String peopleNum1, @RequestParam("peopleNum2") String peopleNum2){
 		System.err.println(peopleNum1);
-		QueryWrapper<Standard> queryWrapper1 = new QueryWrapper<>();
+		QueryWrapper<Room> queryWrapper1 = new QueryWrapper<>();
 		queryWrapper1.between("peopleNum", peopleNum1, peopleNum2);
-		List<Standard> standards = standardService.list(queryWrapper1);
+		List<Room> standards = standardService.list(queryWrapper1);
 		
 		if(standards == null) {
 			return null;
 		}
 		
 		List<Hotel> hotels = new ArrayList<>();
-		for(Standard s: standards) {
+		for(Room s: standards) {
 			QueryWrapper<Hotel> queryWrapper = new QueryWrapper<>();
 			queryWrapper.eq("hid", s.getHid());
 			List<Hotel> tmp = hotelService.list(queryWrapper);
@@ -169,11 +169,11 @@ public class StandardController {
 	 * 05-11fixed
 	 */
 	@GetMapping(path = "/getByPrice")
-	public List<Standard> getByPrice(@RequestParam("price1") String price1, @RequestParam("price2") String price2){
+	public List<Room> getByPrice(@RequestParam("price1") String price1, @RequestParam("price2") String price2){
 		System.err.println(price1);
-		QueryWrapper<Standard> queryWrapper1 = new QueryWrapper<>();
+		QueryWrapper<Room> queryWrapper1 = new QueryWrapper<>();
 		queryWrapper1.between("price", price1, price2);
-		List<Standard> standards = standardService.list(queryWrapper1);
+		List<Room> standards = standardService.list(queryWrapper1);
 		
 		if(standards == null) {
 			return null;
@@ -201,16 +201,16 @@ public class StandardController {
 	@GetMapping(path = "/getHotelByPrice")
 	public List<Hotel> getHotelByPrice(@RequestParam("price1") String price1, @RequestParam("price2") String price2){
 		System.err.println(price1);
-		QueryWrapper<Standard> queryWrapper1 = new QueryWrapper<>();
+		QueryWrapper<Room> queryWrapper1 = new QueryWrapper<>();
 		queryWrapper1.between("price", price1, price2);
-		List<Standard> standards = standardService.list(queryWrapper1);
+		List<Room> standards = standardService.list(queryWrapper1);
 		
 		if(standards == null) {
 			return null;
 		}
 		
 		List<Hotel> hotels = new ArrayList<>();
-		for(Standard s: standards) {
+		for(Room s: standards) {
 			QueryWrapper<Hotel> queryWrapper = new QueryWrapper<>();
 			queryWrapper.eq("hid", s.getHid());
 			List<Hotel> tmp = hotelService.list(queryWrapper);
