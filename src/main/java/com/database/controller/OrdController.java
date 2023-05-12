@@ -25,6 +25,8 @@ import com.database.service.IRoomService;
  * 大概增删改查
  * @author RONG
  * @since 4/12/2023
+ * 
+ * tested 05-12 under new pom
  */
 
 @RestController
@@ -82,7 +84,7 @@ public class OrdController {
 		System.out.println(hid);
 		QueryWrapper<Room> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("hid", hid);
-		List<Room> standards = standardService.list(queryWrapper);
+		List<Room> standards = standardService.list(queryWrapper);//it is called room now
 		List<Ord> orders = new ArrayList<>();
 		
 		if(standards == null) {
@@ -116,9 +118,9 @@ public class OrdController {
 		neword.setTotalPrice(order.getTotalPrice());
 		neword.setUid(order.getUid());
 		orderService.save(neword);
-		Message m = new Message();
-		m.setMessage("success");
-		return m;
+		Message message = new Message();
+		message.setMessage("success");
+		return message;
 	}
 	
 	/**
@@ -127,22 +129,27 @@ public class OrdController {
 	 * @return
 	 */
 	@PostMapping("/changeOrder")
-	public String changeOrder(@RequestBody Ord order) {
+	public Message changeOrder(@RequestBody Ord order,
+			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startTime, 
+			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime) {
+		Message message = new Message();
 		System.err.println(order.getOid());
 		QueryWrapper<Ord> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("oid", order.getOid());
 		if(orderService.getOne(queryWrapper) == null) {
-			return "noOrder";
+			message.setMessage("noorder");
+			return message;
 		}else {
 			Ord theorder = orderService.getOne(queryWrapper);
-			theorder.setEndTime(order.getEndTime());
+			theorder.setEndTime(endTime);
 			theorder.setSid(order.getSid());
-			theorder.setStartTime(order.getStartTime());
+			theorder.setStartTime(startTime);
 			theorder.setState(order.getState());
 			theorder.setTotalPrice(order.getTotalPrice());
 			theorder.setUid(order.getUid());
 			orderService.updateById(theorder);
-			return "success";
+			message.setMessage("success");
+			return message;
 		}
 	}
 	

@@ -21,6 +21,7 @@ import com.database.service.IRoomService;
  * 前端控制器
  * @author RONG
  *
+ * tested 05-12 under new pom and message-using
  */
 @RestController
 @RequestMapping(value = "/room", produces = {"text/html;charset=utf8", "application/json;charset=utf8"})

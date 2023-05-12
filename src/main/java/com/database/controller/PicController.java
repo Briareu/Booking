@@ -21,6 +21,7 @@ import com.database.service.IPicService;
  * @since 4/12/2023
  * 
  * 05-11fixed
+ * tested 5-12 under new pom
  */
 @RestController
 @RequestMapping(value = "/pic", produces = {"text/html;charset=utf8", "application/json;charset=utf8"})

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.database.entity.Message;
 import com.database.entity.User;
 import com.database.service.IUserService;
 
@@ -15,6 +16,8 @@ import com.database.service.IUserService;
  * user控制器
  * @author RONG
  * @since 2023-04-03
+ * 
+ * tested 5-12 under new pom and message(under entity)-using
  */
 @RestController
 @RequestMapping(value = "/user", produces = {"text/html;charset=utf8", "application/json;charset=utf8"})
@@ -32,14 +35,21 @@ public class UserController {
 	 * 05-11fixed
 	 */
 	@PostMapping(path = "/register")
-	public Object register(@RequestBody User user) {
+	public Message register(@RequestBody User user) {
+		Message message = new Message();
 		System.out.println(user.getName());
 		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("phone", user.getPhone());
 		if(userService.getOne(queryWrapper) != null) {
-			return "该用户名已经存在";
+			message.setMessage("该用户名已经存在");
+			return message;
 		}
-
+		
+		if(user.getPhone().length() != 11) {
+			message.setMessage("手机号格式错误");
+			return message;
+		}
+		
 		User newuser = new User();
 		newuser.setGender(user.getGender());
 		newuser.setMail(user.getMail());
@@ -48,7 +58,8 @@ public class UserController {
 		newuser.setPwd(user.getPwd());
 		newuser.setState(user.getState());
 		userService.save(newuser);
-		return "注册成功!";
+		message.setMessage("注册成功");
+		return message;
 	}
 	
 	/**
@@ -59,20 +70,23 @@ public class UserController {
 	 */
 	@PostMapping(path = "/login")
 	public Object login(@RequestBody User loginuser) {
+		Message message = new Message();
 		System.out.println(loginuser.toString());
 		String phone = loginuser.getPhone();
 		String pwd = loginuser.getPwd();
 		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("phone", phone);
 		if(userService.getOne(queryWrapper) == null) {
-			return "nouser";
+			message.setMessage("nouser");
+			return message;
 		}
 		User user = userService.getOne(queryWrapper);
 		if(user.getPwd().equals(pwd)) {
 			user.setState(1);
 			return user;
 		}
-		return "wrong";
+		message.setMessage("wrong");
+		return message;
 	}
 	
 	/**
@@ -81,18 +95,21 @@ public class UserController {
 	 * @return
 	 */
 	@PostMapping(path = "/changePwd")
-	public String changePwd(@RequestBody User user) {
+	public Message changePwd(@RequestBody User user) {
+		Message message = new Message();
 		Integer uid = user.getUid();
 		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("uid", uid);
 		if(userService.getOne(queryWrapper) == null) {
-			return "nouser";
+			message.setMessage("nouser");
+			return message;
 		}
 		
 		User theuser = userService.getOne(queryWrapper);
 		theuser.setPwd(user.getPwd());
 		userService.updateById(theuser);
-		return "success";
+		message.setMessage("success");
+		return message;
 	}
 	
 	/**
@@ -101,12 +118,14 @@ public class UserController {
 	 * @return
 	 */
 	@PostMapping(path = "/changeProfile")
-	public String changeProfile(@RequestBody User user) {
+	public Message changeProfile(@RequestBody User user) {
+		Message message = new Message();
 		Integer uid = user.getUid();
 		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("uid", uid);
 		if(userService.getOne(queryWrapper) == null) {
-			return "nouser";
+			message.setMessage("nouser");
+			return message;
 		}
 		
 		User theuser = userService.getOne(queryWrapper);
@@ -115,7 +134,8 @@ public class UserController {
 		theuser.setMail(user.getMail());
 		theuser.setName(user.getName());
 		userService.updateById(theuser);
-		return "success";
+		message.setMessage("success");
+		return message;
 	}
 	
 	/**
@@ -124,17 +144,20 @@ public class UserController {
 	 * @return
 	 */
 	@PostMapping(path = "changeState")
-	public String changeState(@RequestBody User user) {
+	public Message changeState(@RequestBody User user) {
+		Message message = new Message();
 		Integer uid = user.getUid();
 		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("uid", uid);
 		if(userService.getOne(queryWrapper) == null) {
-			return "nouser";
+			message.setMessage("nouser");
+			return message;
 		}
 		
 		User theuser = userService.getOne(queryWrapper);
 		theuser.setState(user.getState());
 		userService.updateById(theuser);
-		return "success";
+		message.setMessage("success");
+		return message;
 	}
 }
