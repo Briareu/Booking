@@ -1,6 +1,7 @@
 package com.database.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +23,10 @@ import java.util.stream.Collectors;
 public class HotelController {
 	@Autowired
 	private IHotelService hotelService;
+	@Autowired
 	private IOrdService orderService;
-	private IRoomService standardService;
+	@Autowired
+	private IRoomService roomService;
 	
 	/**
 	 * gethotel
@@ -42,17 +45,38 @@ public class HotelController {
 		}
 	}
 	
+	public class roomInfo {
+	    private Integer sid;
+	    private Integer hid;
+	    private Integer totalNum;
+
+	    public roomInfo(Integer sid, Integer hid,Integer totalNum) {
+	        this.sid = sid;
+	        this.hid=hid;
+	        this.totalNum = totalNum;
+	    }
+	    
+	    public Integer getSid() {
+	    	return this.sid;
+	    }
+	    public Integer getTotalNum() {
+	    	return this.totalNum;
+	    }
+	    public Integer getHid() {
+	    	return this.hid;
+	    }
+	}
+	
 	/**
 	 * searchhotel
 	 * @param city,startDate,endDate,name
 	 * @return
 	 */
 	@GetMapping("/searchHotel")
-	public List<Hotel> searchHotel(@RequestParam(value="city",required=false) String city,@RequestParam(value="startDate",required=false) Date startDate,
-			@RequestParam(value="endDate",required=false) Date endDate,@RequestParam(value="name",required=false) String name) {
-		QueryWrapper<Hotel> queryHotel=new QueryWrapper<Hotel>();
-		QueryWrapper<Ord> queryOrder=new QueryWrapper<Ord>();
-		QueryWrapper<Room> queryStandard=new QueryWrapper<Room>();
+	public List<Hotel> searchHotel(@RequestParam(value="city",required=false) String city,@RequestParam(value="startDate",required=false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+			@RequestParam(value="endDate",required=false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,@RequestParam(value="name",required=false) String name) {
+		QueryWrapper<Hotel> queryHotel=new QueryWrapper<>();
+			
 		if(city!=null) {
 			queryHotel.like("city", city);
 		}
@@ -61,26 +85,27 @@ public class HotelController {
 		}
 		List<Hotel> hotels=hotelService.list(queryHotel);
 		if(startDate!=null&&endDate!=null) {
+			List<Hotel> hotels1=new ArrayList<Hotel>();
 			List<Integer> hidList=hotels.stream().map(Hotel::getHid).collect(Collectors.toList()); //hid列表
-			Set<Integer> hidSet=new HashSet<Integer>(hidList); //hid集合
-			queryStandard.in("hid", hidSet);
-			List<Room> standards=standardService.list(queryStandard);  
-			List<Integer> sidList=standards.stream().map(Room::getSid).collect(Collectors.toList()); //sid列表
-			Set<Integer> sidSet=new HashSet<Integer>(sidList); //sid集合
-			queryOrder.in("sid", sidSet);
+			for(Integer hidi:hidList) {
+				QueryWrapper<Room> queryRoom=new QueryWrapper<>();
+				queryRoom.eq("hid", hidi);
+				List<Room> roomList=roomService.list(queryRoom);
+				List<roomInfo> sidList=roomList.stream().map(Room-> new roomInfo(Room.getSid(),Room.getHid(),Room.getTotalNum())).collect(Collectors.toList()); 
+				for(roomInfo sidInfo:sidList) {
+					QueryWrapper<Ord> queryOrder=new QueryWrapper<>();	
+					queryOrder.eq("sid", sidInfo.getSid()).notBetween("startTime", startDate, endDate).notBetween("endTime",startDate, endDate);
+					List<Ord> ordList=orderService.list(queryOrder);
+					if(sidInfo.getTotalNum()-ordList.size()>0) {
+						QueryWrapper<Hotel> queryHotel1=new QueryWrapper<>();
+						queryHotel1.eq("hid",sidInfo.getHid());
+						hotels1.add(hotelService.getOne(queryHotel1));
+						break;
+					}
+				}
+			}
 			
-			queryOrder.notBetween("startTime", startDate, endDate).notBetween("endTime", startDate, endDate);
-			List<Ord> orderList=orderService.list(queryOrder);
-			List<Integer> sidList1=orderList.stream().map(Ord::getSid).collect(Collectors.toList()); //筛选后的sid列表
-			Set<Integer> sidSet1=new HashSet<Integer>(sidList1); //筛选后的sid集合
-			
-			queryStandard.in("sid", sidSet1);
-			List<Room> standards1=standardService.list(queryStandard);
-			List<Integer> hidList1=standards1.stream().map(Room::getHid).collect(Collectors.toList()); //筛选后的hid列表
-			Set<Integer> hidSet1=new HashSet<Integer>(hidList1); //筛选后的hid集合
-			
-			queryHotel.in("hid", hidSet1);
-			hotels=hotelService.list(queryHotel);
+			hotels=hotels1;
 		}
 		
 		return hotels;
