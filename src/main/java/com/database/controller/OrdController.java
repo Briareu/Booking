@@ -40,8 +40,17 @@ public class OrdController {
 	@Autowired
 	private IRoomService standardService;
 	
+	/**
+	 * sortreq = 0, 不排序；
+	 * sortreq = 1, 订单开始时间；
+	 * sortreq = 2, 订单创建时间；
+	 * @param uid
+	 * @param sortreq
+	 * @param sortreq
+	 * @return
+	 */
 	@GetMapping("/getByUid")
-	public List<Ord> getByUid(@RequestParam("uid") Integer uid){
+	public List<Ord> getByUid(@RequestParam("uid") Integer uid, @RequestParam("sortreq") Integer sortreq){
 		System.err.println(uid);
 		QueryWrapper<Ord> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("uid", uid);
@@ -50,18 +59,28 @@ public class OrdController {
 		if(orders == null) {
 			return null;
 		}else {
+			if(sortreq == 1) {
+				orders.sort((t1, t2) -> t2.getStartTime().compareTo(t1.getStartTime()));
+			}else if(sortreq == 2) {
+				orders.sort((t1, t2) -> t2.getCreateTime().compareTo(t1.getCreateTime()));
+			}
 			return orders;
 		}
 	}
 	
 	/**
+	 * sortreq = 0, 不排序；
+	 * sortreq = 1, 订单开始时间；
+	 * sortreq = 2, 订单创建时间；
 	 * 根据uid，state筛选order
 	 * @param uid
 	 * @param state
+	 * @param sortreq
 	 * @return
 	 */
 	@GetMapping("/getByUidAndState")
-	public List<Ord> getByUidAndState(@RequestParam("uid") Integer uid, @RequestParam("state") String state){
+	public List<Ord> getByUidAndState(@RequestParam("uid") Integer uid, @RequestParam("state") String state
+			, @RequestParam("sortreq") Integer sortreq){
 		System.err.println(uid);
 		QueryWrapper<Ord> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("uid", uid).eq("state", state);
@@ -70,17 +89,64 @@ public class OrdController {
 		if(orders == null) {
 			return null;
 		}else {
+			if(sortreq == 1) {
+				orders.sort((t1, t2) -> t2.getStartTime().compareTo(t1.getStartTime()));
+			}else if(sortreq == 2) {
+				orders.sort((t1, t2) -> t2.getCreateTime().compareTo(t1.getCreateTime()));
+			}
 			return orders;
 		}
 	}
 	
 	/**
+	 * sortreq = 0, 不排序；
+	 * sortreq = 1, 订单开始时间；
+	 * sortreq = 2, 订单创建时间；
+	 * 根据hid返回order
+	 * @param uid
+	 * @param hid
+	 * @param sortreq
+	 * @return
+	 */
+	@GetMapping("/getByUidAndHid")
+	public List<Ord> getByUidAndHid(@RequestParam("uid") Integer uid, @RequestParam("hid") Integer hid, 
+			@RequestParam("sortreq") Integer sortreq){
+		System.out.println(hid);
+		QueryWrapper<Room> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("uid", uid).eq("hid", hid);
+		List<Room> standards = standardService.list(queryWrapper);//it is called room now
+		List<Ord> orders = new ArrayList<>();
+		
+		if(standards == null) {
+			return null;
+		}
+		
+		for(Room itr : standards) {
+			QueryWrapper<Ord> queryWrapper2 = new QueryWrapper<>();
+			queryWrapper2.eq("sid", itr.getSid());
+			List<Ord> tmp = orderService.list(queryWrapper2);
+			orders.addAll(tmp);
+		}
+		
+		if(sortreq == 1) {
+			orders.sort((t1, t2) -> t2.getStartTime().compareTo(t1.getStartTime()));
+		}else if(sortreq == 2) {
+			orders.sort((t1, t2) -> t2.getCreateTime().compareTo(t1.getCreateTime()));
+		}
+		return orders;
+	}
+	
+	/**
+	 * sortreq = 0, 不排序；
+	 * sortreq = 1, 订单开始时间；
+	 * sortreq = 2, 订单创建时间；
 	 * 根据hid返回order
 	 * @param hid
+	 * @param sortreq
 	 * @return
 	 */
 	@GetMapping("/getByhid")
-	public List<Ord> getByhid(@RequestParam("hid") Integer hid){
+	public List<Ord> getByhid(@RequestParam("hid") Integer hid, @RequestParam("sortreq") Integer sortreq){
 		System.out.println(hid);
 		QueryWrapper<Room> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("hid", hid);
@@ -98,6 +164,11 @@ public class OrdController {
 			orders.addAll(tmp);
 		}
 		
+		if(sortreq == 1) {
+			orders.sort((t1, t2) -> t2.getStartTime().compareTo(t1.getStartTime()));
+		}else if(sortreq == 2) {
+			orders.sort((t1, t2) -> t2.getCreateTime().compareTo(t1.getCreateTime()));
+		}
 		return orders;
 	}
 	
@@ -126,6 +197,8 @@ public class OrdController {
 	/**
 	 * 根据oid更新
 	 * @param order
+	 * @param startTime
+	 * @param endTime
 	 * @return
 	 */
 	@PostMapping("/changeOrder")

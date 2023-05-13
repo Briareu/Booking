@@ -2,9 +2,11 @@ package com.database.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -83,6 +85,7 @@ public class UserController {
 		User user = userService.getOne(queryWrapper);
 		if(user.getPwd().equals(pwd)) {
 			user.setState(1);
+			userService.updateById(user);
 			return user;
 		}
 		message.setMessage("wrong");
@@ -159,5 +162,62 @@ public class UserController {
 		userService.updateById(theuser);
 		message.setMessage("success");
 		return message;
+	}
+	
+	/**
+	 * 根据uid获取state
+	 * @param uid
+	 * @return
+	 */
+	@GetMapping(path = "/getStateById")
+	public Message getStateById(@RequestParam("uid") Integer uid) {
+		Message message = new Message();
+		System.out.println(uid);
+		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("uid", uid);
+		User thisUser = userService.getOne(queryWrapper);
+		if(thisUser == null) {
+			message.setMessage("nouser");
+			return message;
+		}
+		message.setMessage(Integer.toString(thisUser.getState()));
+		return message;
+	}
+	
+	/**
+	 * 根据phone获取state
+	 * @param phone
+	 * @return
+	 */
+	@GetMapping(path = "/getStateByPno")
+	public Message getStateByPno(@RequestParam("phone") String phone) {
+		Message message = new Message();
+		System.out.println(phone);
+		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("phone", phone);
+		User thisUser = userService.getOne(queryWrapper);
+		if(thisUser == null) {
+			message.setMessage("nouser");
+			return message;
+		}
+		message.setMessage(Integer.toString(thisUser.getState()));
+		return message;
+	}
+	
+	/**
+	 * 根据uid返回User
+	 * @param uid
+	 * @return
+	 */
+	@GetMapping(path = "/getUser")
+	public User getUser(@RequestParam("uid") Integer uid) {
+		System.out.println(uid);
+		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("uid", uid);
+		User thisUser = userService.getOne(queryWrapper);
+		if(thisUser == null) {
+			return null;
+		}
+		return thisUser;
 	}
 }
