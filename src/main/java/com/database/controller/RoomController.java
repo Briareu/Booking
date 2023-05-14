@@ -220,4 +220,70 @@ public class RoomController {
 		
 		return hotels;
 	}
+	
+	/**
+	 * 
+	 * @param des
+	 * @param peopleNum1
+	 * @param peopleNum2
+	 * @param price1
+	 * @param price2
+	 * @return
+	 */
+	@GetMapping(path = "/getByAll")
+	public List<Room> getByAll(@RequestParam("des") String des,
+			@RequestParam("peopleNum1") String peopleNum1, @RequestParam("peopleNum2") String peopleNum2,
+			@RequestParam("price1") String price1, @RequestParam("price2") String price2){
+		System.err.println(price1);
+		QueryWrapper<Room> queryWrapper1 = new QueryWrapper<>();
+		queryWrapper1.eq("des", des).between("peopleNum", peopleNum1, peopleNum2).between("price", price1, price2);
+		List<Room> standards = standardService.list(queryWrapper1);
+		
+		if(standards == null) {
+			return null;
+		}
+		/*
+		List<Hotel> hotels = new ArrayList<>();
+		for(Standard s: standards) {
+			QueryWrapper<Hotel> queryWrapper = new QueryWrapper<>();
+			queryWrapper.eq("hid", s.getHid());
+			List<Hotel> tmp = hotelService.list(queryWrapper);
+			hotels.addAll(tmp);
+		}*/
+		
+		return standards;
+	}
+	
+	/**
+	 * 返回酒店
+	 * @param des
+	 * @param peopleNum1
+	 * @param peopleNum2
+	 * @param price1
+	 * @param price2
+	 * @return
+	 */
+	@GetMapping(path = "/getHotelByAll")
+	public List<Hotel> getHotelByAll(@RequestParam("des") String des,
+			@RequestParam("peopleNum1") String peopleNum1, @RequestParam("peopleNum2") String peopleNum2,
+			@RequestParam("price1") String price1, @RequestParam("price2") String price2){
+		System.err.println(price1);
+		QueryWrapper<Room> queryWrapper1 = new QueryWrapper<>();
+		queryWrapper1.eq("des", des).between("peopleNum", peopleNum1, peopleNum2).between("price", price1, price2);
+		List<Room> standards = standardService.list(queryWrapper1);
+		
+		if(standards == null) {
+			return null;
+		}
+		
+		List<Hotel> hotels = new ArrayList<>();
+		for(Room s: standards) {
+			QueryWrapper<Hotel> queryWrapper = new QueryWrapper<>();
+			queryWrapper.eq("hid", s.getHid());
+			List<Hotel> tmp = hotelService.list(queryWrapper);
+			hotels.addAll(tmp);
+		}
+		
+		return hotels;
+	}
 }

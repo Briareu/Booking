@@ -45,9 +45,6 @@ public class PicController {
 		QueryWrapper<Pic> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("hid", hid);
 		List<Pic> pics = picService.list(queryWrapper);
-		for(Pic p : pics) {
-			p.setPicUrl(pic_url + p.getPicUrl()); 
-		}
 		return pics;
 	}
 }
