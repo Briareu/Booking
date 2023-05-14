@@ -37,8 +37,8 @@ public class Hotel implements Serializable {
 	@TableField("star")
 	private Integer star;
 	
-	@TableField("type")
-	private String type;
+	@TableField("leixing")
+	private String leixing;
 	
 	@TableField("comment")
 	private String comment;

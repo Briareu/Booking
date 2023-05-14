@@ -8,7 +8,7 @@
         <result column="address" property="address" />
         <result column="info" property="info" />
         <result column="star" property="star" />
-        <result column="type" property="type" />
+        <result column="leixing" property="leixing" />
         <result column="comment" property="comment" />
         <result column="name" property="name" />
         <result column="score" property="score" />

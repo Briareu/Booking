@@ -110,4 +110,17 @@ public class HotelController {
 		
 		return hotels;
 	}
+
+	/**
+	 * searchhotel
+	 * @param hotelType
+	 * @return
+	 */
+	@GetMapping("/getHotelByType")
+	public List<Hotel> getHotelByType(@RequestParam("hotelType") String hotelType) {
+		QueryWrapper<Hotel> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("leixing", hotelType);
+		List<Hotel> hotels=hotelService.list(queryWrapper);
+		return hotels;
+	}
 }
