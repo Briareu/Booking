@@ -12,6 +12,7 @@
         <result column="startTime" property="startTime" />
         <result column="endTime" property="endTime" />
         <result column="sid" property="sid" />
+        <result column="num" property="num" />
     </resultMap>
 
 </mapper>

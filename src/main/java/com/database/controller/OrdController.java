@@ -188,6 +188,26 @@ public class OrdController {
 		neword.setState(order.getState());
 		neword.setTotalPrice(order.getTotalPrice());
 		neword.setUid(order.getUid());
+		neword.setNum(order.getNum());
+		orderService.save(neword);
+		Message message = new Message();
+		message.setMessage("success");
+		return message;
+	}
+	
+	/**
+	 * 添加
+	 * @param order
+	 * @return
+	 */
+	@PostMapping("/addYuding")
+	public Message addYuding(@RequestBody Ord order) {
+		Ord neword = new Ord();
+		neword.setSid(order.getSid());
+		neword.setState(order.getState());
+		neword.setTotalPrice(order.getTotalPrice());
+		neword.setUid(order.getUid());
+		neword.setNum(order.getNum());
 		orderService.save(neword);
 		Message message = new Message();
 		message.setMessage("success");
