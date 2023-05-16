@@ -49,6 +49,9 @@ public class RoomController {
 		if(standards == null) {
 			return null;
 		}else{
+			for(Room r : standards) {
+				r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "")));
+			}
 			return standards;
 		}
 	}
@@ -64,10 +67,13 @@ public class RoomController {
 	public List<Room> getByDescription(@RequestParam("des") String des){
 		System.err.println(des);
 		QueryWrapper<Room> queryWrapper1 = new QueryWrapper<>();
-		queryWrapper1.eq("des", des);
+		queryWrapper1.like("des", des);
 		List<Room> standards = standardService.list(queryWrapper1);
 		if(standards == null) {
 			return null;
+		}
+		for(Room r : standards) {
+			r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "")));
 		}
 		return standards;
 	}
@@ -83,7 +89,7 @@ public class RoomController {
 	public List<Hotel> getHotelByDescription(@RequestParam("des") String des){
 		System.err.println(des);
 		QueryWrapper<Room> queryWrapper1 = new QueryWrapper<>();
-		queryWrapper1.eq("des", des);
+		queryWrapper1.like("des", des);
 		List<Room> standards = standardService.list(queryWrapper1);
 		if(standards == null) {
 			return null;
@@ -128,6 +134,9 @@ public class RoomController {
 		}
 		
 		return hotels;*/
+		for(Room r : standards) {
+			r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "")));
+		}
 		return standards;
 	}
 	
@@ -188,6 +197,9 @@ public class RoomController {
 			hotels.addAll(tmp);
 		}*/
 		
+		for(Room r : standards) {
+			r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "")));
+		}
 		return standards;
 	}
 	
@@ -236,7 +248,7 @@ public class RoomController {
 			@RequestParam("price1") String price1, @RequestParam("price2") String price2){
 		System.err.println(price1);
 		QueryWrapper<Room> queryWrapper1 = new QueryWrapper<>();
-		queryWrapper1.eq("des", des).between("peopleNum", peopleNum1, peopleNum2).between("price", price1, price2);
+		queryWrapper1.like("des", des).between("peopleNum", peopleNum1, peopleNum2).between("price", price1, price2);
 		List<Room> standards = standardService.list(queryWrapper1);
 		
 		if(standards == null) {
@@ -251,6 +263,9 @@ public class RoomController {
 			hotels.addAll(tmp);
 		}*/
 		
+		for(Room r : standards) {
+			r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "")));
+		}
 		return standards;
 	}
 	
@@ -269,7 +284,7 @@ public class RoomController {
 			@RequestParam("price1") String price1, @RequestParam("price2") String price2){
 		System.err.println(price1);
 		QueryWrapper<Room> queryWrapper1 = new QueryWrapper<>();
-		queryWrapper1.eq("des", des).between("peopleNum", peopleNum1, peopleNum2).between("price", price1, price2);
+		queryWrapper1.like("des", des).between("peopleNum", peopleNum1, peopleNum2).between("price", price1, price2);
 		List<Room> standards = standardService.list(queryWrapper1);
 		
 		if(standards == null) {

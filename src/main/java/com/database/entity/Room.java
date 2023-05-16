@@ -1,5 +1,6 @@
 package com.database.entity;
 
+import java.beans.Transient;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -48,4 +49,7 @@ public class Room implements Serializable {
 	
 	@TableField("peopleNum")
 	private Integer peopleNum;
+	
+	@TableField(exist = false)
+	private Integer priceInt;
 }
