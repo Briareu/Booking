@@ -62,10 +62,25 @@ public class OrdController {
 		}
 	}
 	
+	@GetMapping("/getByOrdseq")
+	public Object getByOrdseq(@RequestParam("ordseq") String ordseq){
+		Message message = new Message();
+		System.err.println(ordseq);
+		QueryWrapper<Ord> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("ordseq", ordseq);
+		Ord ord = orderService.getOne(queryWrapper);
+		
+		if(ord == null) {
+			message.setMessage("noord");
+			return message;
+		}else {
+			return ord;
+		}
+	}
+	
 	/**
 	 * 
 	 * @param sid
-	 * @param sortreq
 	 * @return
 	 */
 	@GetMapping("/getBySid")
@@ -79,11 +94,6 @@ public class OrdController {
 		if(orders == null) {
 			return null;
 		}else {
-			/*if(sortreq == 1) {
-				orders.sort((t1, t2) -> t2.getStartTime().compareTo(t1.getStartTime()));
-			}else if(sortreq == 2) {
-				orders.sort((t1, t2) -> t2.getCreateTime().compareTo(t1.getCreateTime()));
-			}*/
 			return orders;
 		}
 	}
