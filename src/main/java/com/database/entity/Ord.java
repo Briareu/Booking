@@ -78,4 +78,7 @@ public class Ord implements Serializable {
 	
 	@TableField("num")
 	private Integer num;
+	
+	@TableField("ordseq")
+	private String ordseq;
 }

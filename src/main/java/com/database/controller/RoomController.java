@@ -48,12 +48,11 @@ public class RoomController {
 		
 		if(standards == null) {
 			return null;
-		}else{
-			for(Room r : standards) {
-				r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "")));
-			}
-			return standards;
 		}
+		for(Room r : standards) {
+			r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "").replace(",", "")));
+		}
+		return standards;
 	}
 	
 	/**

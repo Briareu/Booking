@@ -21,6 +21,8 @@ import com.database.entity.Room;
 import com.database.service.IOrdService;
 import com.database.service.IRoomService;
 
+import cn.hutool.core.lang.UUID;
+
 /**
  * 大概增删改查
  * @author RONG
@@ -41,16 +43,13 @@ public class OrdController {
 	private IRoomService standardService;
 	
 	/**
-	 * sortreq = 0, 不排序；
-	 * sortreq = 1, 订单开始时间；
-	 * sortreq = 2, 订单创建时间；
 	 * @param uid
 	 * @param sortreq
 	 * @param sortreq
 	 * @return
 	 */
 	@GetMapping("/getByUid")
-	public List<Ord> getByUid(@RequestParam("uid") Integer uid, @RequestParam("sortreq") Integer sortreq){
+	public List<Ord> getByUid(@RequestParam("uid") Integer uid){
 		System.err.println(uid);
 		QueryWrapper<Ord> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("uid", uid);
@@ -59,15 +58,35 @@ public class OrdController {
 		if(orders == null) {
 			return null;
 		}else {
-			if(sortreq == 1) {
-				orders.sort((t1, t2) -> t2.getStartTime().compareTo(t1.getStartTime()));
-			}else if(sortreq == 2) {
-				orders.sort((t1, t2) -> t2.getCreateTime().compareTo(t1.getCreateTime()));
-			}
 			return orders;
 		}
 	}
 	
+	/**
+	 * 
+	 * @param sid
+	 * @param sortreq
+	 * @return
+	 */
+	@GetMapping("/getBySid")
+	public List<Ord> getBySid(@RequestParam("sid") Integer sid
+			){
+		System.err.println(sid);
+		QueryWrapper<Ord> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("sid", sid);
+		List<Ord> orders = orderService.list(queryWrapper);
+		
+		if(orders == null) {
+			return null;
+		}else {
+			/*if(sortreq == 1) {
+				orders.sort((t1, t2) -> t2.getStartTime().compareTo(t1.getStartTime()));
+			}else if(sortreq == 2) {
+				orders.sort((t1, t2) -> t2.getCreateTime().compareTo(t1.getCreateTime()));
+			}*/
+			return orders;
+		}
+	}
 	/**
 	 * sortreq = 0, 不排序；
 	 * sortreq = 1, 订单开始时间；
@@ -80,7 +99,8 @@ public class OrdController {
 	 */
 	@GetMapping("/getByUidAndState")
 	public List<Ord> getByUidAndState(@RequestParam("uid") Integer uid, @RequestParam("state") String state
-			, @RequestParam("sortreq") Integer sortreq){
+			//, @RequestParam("sortreq") Integer sortreq
+			){
 		System.err.println(uid);
 		QueryWrapper<Ord> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("uid", uid).eq("state", state);
@@ -89,11 +109,11 @@ public class OrdController {
 		if(orders == null) {
 			return null;
 		}else {
-			if(sortreq == 1) {
+			/*if(sortreq == 1) {
 				orders.sort((t1, t2) -> t2.getStartTime().compareTo(t1.getStartTime()));
 			}else if(sortreq == 2) {
 				orders.sort((t1, t2) -> t2.getCreateTime().compareTo(t1.getCreateTime()));
-			}
+			}*/
 			return orders;
 		}
 	}
@@ -109,8 +129,9 @@ public class OrdController {
 	 * @return
 	 */
 	@GetMapping("/getByUidAndHid")
-	public List<Ord> getByUidAndHid(@RequestParam("uid") Integer uid, @RequestParam("hid") Integer hid, 
-			@RequestParam("sortreq") Integer sortreq){
+	public List<Ord> getByUidAndHid(@RequestParam("uid") Integer uid, @RequestParam("hid") Integer hid
+			// @RequestParam("sortreq") Integer sortreq
+			){
 		System.out.println(hid);
 		QueryWrapper<Room> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("uid", uid).eq("hid", hid);
@@ -128,11 +149,11 @@ public class OrdController {
 			orders.addAll(tmp);
 		}
 		
-		if(sortreq == 1) {
+		/*if(sortreq == 1) {
 			orders.sort((t1, t2) -> t2.getStartTime().compareTo(t1.getStartTime()));
 		}else if(sortreq == 2) {
 			orders.sort((t1, t2) -> t2.getCreateTime().compareTo(t1.getCreateTime()));
-		}
+		}*/
 		return orders;
 	}
 	
@@ -146,7 +167,9 @@ public class OrdController {
 	 * @return
 	 */
 	@GetMapping("/getByhid")
-	public List<Ord> getByhid(@RequestParam("hid") Integer hid, @RequestParam("sortreq") Integer sortreq){
+	public List<Ord> getByhid(@RequestParam("hid") Integer hid
+			//, @RequestParam("sortreq") Integer sortreq
+			){
 		System.out.println(hid);
 		QueryWrapper<Room> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("hid", hid);
@@ -164,11 +187,11 @@ public class OrdController {
 			orders.addAll(tmp);
 		}
 		
-		if(sortreq == 1) {
+		/*if(sortreq == 1) {
 			orders.sort((t1, t2) -> t2.getStartTime().compareTo(t1.getStartTime()));
 		}else if(sortreq == 2) {
 			orders.sort((t1, t2) -> t2.getCreateTime().compareTo(t1.getCreateTime()));
-		}
+		}*/
 		return orders;
 	}
 	
@@ -189,6 +212,12 @@ public class OrdController {
 		neword.setTotalPrice(order.getTotalPrice());
 		neword.setUid(order.getUid());
 		neword.setNum(order.getNum());
+		
+		long time = System.currentTimeMillis();
+		int random = (int)(Math.random() * Integer.MAX_VALUE);
+		UUID uuid = new UUID(time, random);
+		neword.setOrdseq(uuid.toString().replace("-", "").toLowerCase());
+		
 		orderService.save(neword);
 		Message message = new Message();
 		message.setMessage("success");
@@ -208,11 +237,18 @@ public class OrdController {
 		neword.setTotalPrice(order.getTotalPrice());
 		neword.setUid(order.getUid());
 		neword.setNum(order.getNum());
+		
+		long time = System.currentTimeMillis();
+		int random = (int)(Math.random() * Integer.MAX_VALUE);
+		UUID uuid = new UUID(time, random);
+		neword.setOrdseq(uuid.toString().replace("-", "").toLowerCase());
+		
 		orderService.save(neword);
 		Message message = new Message();
 		message.setMessage("success");
 		return message;
 	}
+	
 	
 	/**
 	 * 根据oid更新
@@ -228,7 +264,7 @@ public class OrdController {
 		Message message = new Message();
 		System.err.println(order.getOid());
 		QueryWrapper<Ord> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("oid", order.getOid());
+		queryWrapper.eq("ordseq", order.getOrdseq());
 		if(orderService.getOne(queryWrapper) == null) {
 			message.setMessage("noorder");
 			return message;
@@ -247,14 +283,38 @@ public class OrdController {
 	}
 	
 	/**
+	 * 
+	 * @param ordseq
+	 * @param state
+	 * @return
+	 */
+	@PostMapping("/changeState")
+	public Message changeState(@RequestParam("ordseq") String ordseq, @RequestParam("state") String state) {
+		Message message = new Message();
+		System.err.println(ordseq);
+		QueryWrapper<Ord> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("ordseq", ordseq);
+		if(orderService.getOne(queryWrapper) == null) {
+			message.setMessage("noorder");
+			return message;
+		}else {
+			Ord theorder = orderService.getOne(queryWrapper);
+			theorder.setState(state);
+			orderService.updateById(theorder);
+			message.setMessage("success");
+			return message;
+		}
+	}
+	
+	/**
 	 * 根据oid删除order
 	 * @param oid
 	 * @return
 	 */
 	@GetMapping("/delOrder")
-	public boolean delOrder(@RequestParam("oid") Integer oid) {
+	public boolean delOrder(@RequestParam("ordseq") String ordseq) {
 		QueryWrapper<Ord> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("oid", oid);
+		queryWrapper.eq("ordseq", ordseq);
 		boolean del = orderService.remove(queryWrapper);
 		return del;
 	}
