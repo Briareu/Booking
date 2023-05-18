@@ -213,13 +213,13 @@ public class OrdController {
 	 * @return
 	 */
 	@PostMapping("/addOrder")
-	public Message addOrder(@RequestBody Ord order,
-			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startTime, 
-			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime) {
+	public Message addOrder(@RequestBody Ord order) {
 		Ord neword = new Ord();
-		neword.setEndTime(endTime);
+		//neword.setEndTime(endTime);
+		neword.setEndTime(order.getEndTime());
 		neword.setSid(order.getSid());
-		neword.setStartTime(startTime);
+		//neword.setStartTime(startTime);
+		neword.setStartTime(order.getStartTime());
 		neword.setState(order.getState());
 		neword.setTotalPrice(order.getTotalPrice());
 		neword.setUid(order.getUid());
@@ -270,9 +270,7 @@ public class OrdController {
 	 * @return
 	 */
 	@PostMapping("/changeOrder")
-	public Message changeOrder(@RequestBody Ord order,
-			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startTime, 
-			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime) {
+	public Message changeOrder(@RequestBody Ord order) {
 		Message message = new Message();
 		System.err.println(order.getOid());
 		QueryWrapper<Ord> queryWrapper = new QueryWrapper<>();
@@ -282,9 +280,9 @@ public class OrdController {
 			return message;
 		}else {
 			Ord theorder = orderService.getOne(queryWrapper);
-			theorder.setEndTime(endTime);
+			theorder.setEndTime(order.getEndTime());
 			theorder.setSid(order.getSid());
-			theorder.setStartTime(startTime);
+			theorder.setStartTime(order.getStartTime());
 			theorder.setState(order.getState());
 			theorder.setTotalPrice(order.getTotalPrice());
 			theorder.setUid(order.getUid());
