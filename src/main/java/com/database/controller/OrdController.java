@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -34,6 +35,7 @@ import cn.hutool.core.lang.UUID;
 @RestController
 @RequestMapping(value = "/ord", produces = {"text/html;charset=utf8", "application/json;charset=utf8"})
 @CrossOrigin
+@ResponseBody
 public class OrdController {
 
 	@Autowired
@@ -298,7 +300,7 @@ public class OrdController {
 	 * @param state
 	 * @return
 	 */
-	@PostMapping("/changeState")
+	@GetMapping("/changeState")
 	public Message changeState(@RequestParam("ordseq") String ordseq, @RequestParam("state") String state) {
 		Message message = new Message();
 		System.err.println(ordseq);
