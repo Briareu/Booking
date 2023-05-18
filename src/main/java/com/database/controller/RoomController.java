@@ -1,9 +1,12 @@
 package com.database.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,8 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.database.entity.Hotel;
+import com.database.entity.Ord;
 import com.database.entity.Room;
 import com.database.service.IHotelService;
+import com.database.service.IOrdService;
 import com.database.service.IRoomService;
 
 /**
@@ -32,6 +37,9 @@ public class RoomController {
 	
 	@Autowired
 	private IHotelService hotelService;
+	
+	@Autowired
+	private IOrdService ordService;
 	
 	/**
 	 * 获取hotel全部standard信息
@@ -299,5 +307,74 @@ public class RoomController {
 		}
 		
 		return hotels;
+	}
+	
+	/**
+	 * 
+	 * @param hid
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	@GetMapping(path = "/getByDate")
+	public List<Room> getByDate(@RequestParam("hid") Integer hid,
+			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startTime,
+			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime){
+		System.err.println(hid);
+		QueryWrapper<Room> queryWrapper1 = new QueryWrapper<>();
+		queryWrapper1.eq("hid", hid);
+		List<Room> standards = standardService.list(queryWrapper1);
+		
+		if(standards == null) {
+			return null;
+		}
+		
+		//standards.sort((t1, t2) -> t2.getSid().compareTo(t1.getSid()));
+		
+		// check order
+		
+		/*
+		List<Hotel> hotels = new ArrayList<>();
+		for(Standard s: standards) {
+			QueryWrapper<Hotel> queryWrapper = new QueryWrapper<>();
+			queryWrapper.eq("hid", s.getHid());
+			List<Hotel> tmp = hotelService.list(queryWrapper);
+			hotels.addAll(tmp);
+		}*/
+		
+		Iterator<Room> it = standards.iterator();
+		
+		while(it.hasNext()) {
+			Room r = (Room) it.next();
+			int former = r.getTotalNum();
+			
+			r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "")));
+			
+			QueryWrapper<Ord> queryWrapper2 = new QueryWrapper<>();
+			queryWrapper2.eq("sid", r.getSid());
+			queryWrapper2.and(qwt->qwt.between("startTime", startTime, endTime));
+			queryWrapper2.or(qwt->qwt.eq("sid", r.getSid()).le("startTime", startTime))
+					.and(w->w.between("endTime", startTime, endTime).or(q->q.ge("endTime", endTime)));
+			
+			
+			List<Ord> orders = ordService.list(queryWrapper2);
+			
+			if(orders != null) {
+				for(Ord o : orders) {
+					System.err.println(former);
+					former -= o.getNum();
+				}
+				if(former <= 0) {
+					System.err.println(former);
+					it.remove();
+				}else {
+					r.setTotalNum(former);
+				}
+			}
+		}
+		
+		
+		
+		return standards;
 	}
 }
