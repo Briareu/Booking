@@ -62,7 +62,26 @@ public class RoomController {
 		}
 		return standards;
 	}
-	
+	/**
+	 * 
+	 * @param sid
+	 * @return
+	 */
+	@GetMapping(value = "/getBySid")
+	public List<Room> getBySid(@RequestParam("sid") Integer sid){
+		System.err.println(sid);
+		QueryWrapper<Room> queryWrapper1 = new QueryWrapper<>();
+		queryWrapper1.eq("sid", sid);
+		List<Room> standards = standardService.list(queryWrapper1);
+		
+		if(standards == null) {
+			return null;
+		}
+		for(Room r : standards) {
+			r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "").replace(",", "")));
+		}
+		return standards;
+	}
 	/**
 	 * 根据标准返回房型
 	 * @param description
@@ -80,7 +99,7 @@ public class RoomController {
 			return null;
 		}
 		for(Room r : standards) {
-			r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "")));
+			r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "").replace(",", "")));
 		}
 		return standards;
 	}
@@ -142,7 +161,7 @@ public class RoomController {
 		
 		return hotels;*/
 		for(Room r : standards) {
-			r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "")));
+			r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "").replace(",", "")));
 		}
 		return standards;
 	}
@@ -205,7 +224,7 @@ public class RoomController {
 		}*/
 		
 		for(Room r : standards) {
-			r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "")));
+			r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "").replace(",", "")));
 		}
 		return standards;
 	}
@@ -271,7 +290,7 @@ public class RoomController {
 		}*/
 		
 		for(Room r : standards) {
-			r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "")));
+			r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "").replace(",", "")));
 		}
 		return standards;
 	}
@@ -348,7 +367,7 @@ public class RoomController {
 			Room r = (Room) it.next();
 			int former = r.getTotalNum();
 			
-			r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "")));
+			r.setPriceInt(Integer.valueOf(r.getPrice().replace("元", "").replace(",", "")));
 			
 			QueryWrapper<Ord> queryWrapper2 = new QueryWrapper<>();
 			queryWrapper2.eq("sid", r.getSid());
