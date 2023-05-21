@@ -63,12 +63,12 @@ public class Ord implements Serializable {
 	@TableField("state")
 	private String state;
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@TableField(value = "startTime")
 	private LocalDateTime startTime;
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@TableField("endTime")
 	private LocalDateTime endTime;

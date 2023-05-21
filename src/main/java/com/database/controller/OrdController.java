@@ -317,14 +317,26 @@ public class OrdController {
 	}
 	
 	/**
-	 * 根据oid删除order
-	 * @param oid
+	 * 根据ordseq删除order
+	 * @param ordseq
 	 * @return
 	 */
 	@GetMapping("/delOrder")
 	public boolean delOrder(@RequestParam("ordseq") String ordseq) {
 		QueryWrapper<Ord> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("ordseq", ordseq);
+		boolean del = orderService.remove(queryWrapper);
+		return del;
+	}
+	/**
+	 * 根据oid删除order
+	 * @param oid
+	 * @return
+	 */
+	@GetMapping("/delOrderbyOid")
+	public boolean delOrderbyOid(@RequestParam("oid") String oid) {
+		QueryWrapper<Ord> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("oid", oid);
 		boolean del = orderService.remove(queryWrapper);
 		return del;
 	}

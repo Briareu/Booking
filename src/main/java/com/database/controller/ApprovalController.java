@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.database.entity.Approval;
+import com.database.entity.Message;
 import com.database.service.IApprovalService;
 
 /**
@@ -48,12 +49,14 @@ public class ApprovalController {
 	 * @return
 	 */
 	@PostMapping("/addLike")
-	public String addLike(@RequestBody Approval like) {
+	public Message addLike(@RequestBody Approval like) {
+		Message message = new Message();
 		Approval tmp = new Approval();
 		tmp.setHid(like.getHid());
 		tmp.setUid(like.getUid());
 		likeService.save(tmp);
-		return "添加成功";
+		message.setMessage("添加成功");
+		return message;
 	}
 	
 	/**
@@ -62,16 +65,19 @@ public class ApprovalController {
 	 * @return
 	 */
 	@PostMapping("/changeLike")
-	public String changeLike(@RequestBody Approval like) {
+	public Message changeLike(@RequestBody Approval like) {
+		Message message = new Message();
 		QueryWrapper<Approval> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("lid", like.getLid());
 		if(likeService.getOne(queryWrapper) == null) {
-			return "nolike";
+			message.setMessage("nolike");
+			return message;
 		}else {
 			Approval thelike = likeService.getOne(queryWrapper);
 			thelike.setHid(like.getHid());
 			thelike.setUid(like.getUid());
-			return "success";
+			message.setMessage("success");
+			return message;
 		}
 	}
 	
@@ -84,6 +90,20 @@ public class ApprovalController {
 	public boolean delLike(@RequestParam("lid") Integer lid) {
 		QueryWrapper<Approval> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("lid", lid);
+		boolean del = likeService.remove(queryWrapper);
+		
+		return del;
+	}
+	
+	/**
+	 * 
+	 * @param ap
+	 * @return
+	 */
+	@PostMapping("/delLikeById")
+	public boolean delLikeById(@RequestBody Approval ap) {
+		QueryWrapper<Approval> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("uid", ap.getUid()).eq("hid", ap.getHid());
 		boolean del = likeService.remove(queryWrapper);
 		
 		return del;
