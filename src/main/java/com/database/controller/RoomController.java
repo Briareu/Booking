@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -335,13 +337,11 @@ public class RoomController {
 	 * @param endTime
 	 * @return
 	 */
-	@GetMapping(path = "/getByDate")
-	public List<Room> getByDate(@RequestParam("hid") Integer hid,
-			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startTime,
-			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime){
-		System.err.println(hid);
+	@PostMapping(path = "/getByDate")
+	public List<Room> getByDate(@RequestBody Ord order){
+		System.err.println(order.getSid());
 		QueryWrapper<Room> queryWrapper1 = new QueryWrapper<>();
-		queryWrapper1.eq("hid", hid);
+		queryWrapper1.eq("hid", order.getSid());
 		List<Room> standards = standardService.list(queryWrapper1);
 		
 		if(standards == null) {
@@ -371,9 +371,9 @@ public class RoomController {
 			
 			QueryWrapper<Ord> queryWrapper2 = new QueryWrapper<>();
 			queryWrapper2.eq("sid", r.getSid());
-			queryWrapper2.and(qwt->qwt.between("startTime", startTime, endTime));
-			queryWrapper2.or(qwt->qwt.eq("sid", r.getSid()).le("startTime", startTime))
-					.and(w->w.between("endTime", startTime, endTime).or(q->q.ge("endTime", endTime)));
+			queryWrapper2.and(qwt->qwt.between("startTime", order.getStartTime(), order.getEndTime()));
+			queryWrapper2.or(qwt->qwt.eq("sid", r.getSid()).le("startTime", order.getStartTime()))
+					.and(w->w.between("endTime", order.getStartTime(), order.getEndTime()).or(q->q.ge("endTime", order.getEndTime())));
 			
 			
 			List<Ord> orders = ordService.list(queryWrapper2);
