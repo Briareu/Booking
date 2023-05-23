@@ -45,6 +45,19 @@ public class HotelController {
 		}
 	}
 	
+	/**
+	 * gethotelList
+	 * @param hid
+	 * @return
+	 */
+	@GetMapping("/getHotelListByHid")
+	public List<Hotel> getHotelListByHid(@RequestParam("hid") Integer hid) {
+		QueryWrapper<Hotel> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("hid", hid);
+		List<Hotel> hotels = hotelService.list(queryWrapper);
+	    return hotels;
+	}
+	
 	public class roomInfo {
 	    private Integer sid;
 	    private Integer hid;

@@ -136,6 +136,9 @@ public class UserController {
 		theuser.setGender(user.getGender());
 		theuser.setMail(user.getMail());
 		theuser.setName(user.getName());
+		theuser.setPhone(user.getPhone());
+		theuser.setPwd(user.getPwd());
+		theuser.setState(user.getState());
 		userService.updateById(theuser);
 		message.setMessage("success");
 		return message;
